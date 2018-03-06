@@ -34,3 +34,4 @@ node_modules
 .deploy_git/
 public/
 # themes/
+package-lock.json
