@@ -1,0 +1,69 @@
+<% 
+    function resolveImgURL(from, path) {
+        // check if the url provided is
+        if (from !== null && !is_remote_url(path)) {
+            // format `from` path
+            // remove .html at the end of url
+            if (from.indexOf('.html') >= 0) {
+                from = from.replace('.html', '')
+            }
+            // remove end `/` of `from` path
+            if (from.length === from.lastIndexOf('/') + 1) {
+                from = from.substr(0, from.lastIndexOf('/'))
+            }
+            // remove end `/` of `url` path
+            if (path.indexOf('/') === 1) {
+                path = url.substr(1);
+            }
+            return url_for(from + '/' + path);
+
+        }
+        else {
+            return path;
+        }
+    }
+%>
+<!DOCTYPE html>
+<html lang="<%= config.language %>">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="author" content="<%= config.author %>">
+	<% if (theme.favicon) { %>
+        <link rel="icon" href="<%= resolveImgURL(theme.image_dir,theme.favicon) %>">
+    <% } %>
+    <%
+        function delHtmlTag( str ){
+            return str.replace(/<[^>]+>/g,"");
+        }
+        var tags = [];
+        if( page&&page.tags ){
+        	page.tags.each(function( tag , index ){
+        		tags.push( tag.name );
+        	})
+        }
+
+        var excerpt;
+        if( page && page.excerpt ){
+        	excerpt = delHtmlTag( page.excerpt).replace(/\s/g,'');
+        }else if( page && page.content ){
+        	excerpt = delHtmlTag( page.content ).replace(/\s/g,'');
+        }
+
+        var title;
+        if( page && page.title ){
+        	title = page.title + ' - ' + config.title
+        }else{
+        	title = config.title;
+        }
+    %>
+    <% if( tags.length > 0 ){%>
+    	<meta name="keyword" content="<%= tags.join(',')%>">
+    <%}%>
+    <% if( excerpt ){%>
+    	<meta name="description" content="<%= excerpt%>">
+    <%}%>
+	<title><%=title%></title>
+	<%- css('static/css/style.css') %>
+</head>
+<body>
