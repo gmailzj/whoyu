@@ -144,3 +144,21 @@ console.log(curried(1)(2, 3))
 // => [1, 2, 3]
 ```
 
+## 反柯里化
+
+```
+Function.prototype.uncurring = function() {
+  var self = this;
+  return function() {
+    var obj = Array.prototype.shift.call(arguments);
+    return self.apply(obj, arguments);
+  };
+};
+```
+把Array.prototype.push方法转换成一个通用的push函数，只需要这样做：
+
+
+```
+var push = Array.prototype.push.uncurring();
+```
+
