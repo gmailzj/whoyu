@@ -4,7 +4,7 @@
   <url>
     <loc>http://whoyu.com/post/2017/08/curry-in-javascript/</loc>
     
-    <lastmod>2018-04-03T08:50:23.000Z</lastmod>
+    <lastmod>2018-04-03T09:38:45.000Z</lastmod>
     
   </url>
   
@@ -37,6 +37,20 @@
   </url>
   
   <url>
+    <loc>http://whoyu.com/tags/index.html</loc>
+    
+    <lastmod>2018-03-06T11:05:00.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://whoyu.com/feed/index.html</loc>
+    
+    <lastmod>2018-03-06T11:05:00.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://whoyu.com/rss/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
@@ -51,27 +65,6 @@
   </url>
   
   <url>
-    <loc>http://whoyu.com/archive/index.html</loc>
-    
-    <lastmod>2018-03-06T11:05:00.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://whoyu.com/tags/index.html</loc>
-    
-    <lastmod>2018-03-06T11:05:00.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://whoyu.com/about/index.html</loc>
-    
-    <lastmod>2018-03-06T11:05:00.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://whoyu.com/books/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
@@ -79,7 +72,14 @@
   </url>
   
   <url>
-    <loc>http://whoyu.com/feed/index.html</loc>
+    <loc>http://whoyu.com/archive/index.html</loc>
+    
+    <lastmod>2018-03-06T11:05:00.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://whoyu.com/about/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
