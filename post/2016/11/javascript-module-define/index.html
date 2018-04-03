@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="author" content="gmailzj">
+	
+        <link rel="icon" href="/static/images/favicon.png">
+    
+    
+    
+    	<meta name="keyword" content="javascript,commonjs,define">
+    
+    
+    	<meta name="description" content="兼容Commonjs、AMD模块加载的写法">
+    
+	<title>javascript 模块定义几种方式 - whoyu</title>
+	<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+
+
+<nav  id="sidebar" class=" behavior_1">
+    <div class="wrap">
+    	
+    		<div class="profile">
+    			<a href="/"><img src="/static/images/gravatar.jpg" alt="whoyu"></a>
+    			<span>whoyu</span>
+    		</div>
+    	
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  class="" href="/">
+                            
+                                <i class="iconfont icon-home" title="首页"></i>
+                            
+                            <span>首页</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/archive/">
+                            
+                                <i class="iconfont icon-archive" title="归档"></i>
+                            
+                            <span>归档</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/tags/">
+                            
+                                <i class="iconfont icon-tags" title="标签"></i>
+                            
+                            <span>标签</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/about/">
+                            
+                                <i class="iconfont icon-user" title="关于"></i>
+                            
+                            <span>关于</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/links/">
+                            
+                                <i class="iconfont icon-link" title="友链"></i>
+                            
+                            <span>友链</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  target="_blank"  class="" href="https://github.com/gmailzj">
+                            
+                                <i class="iconfont icon-github" title="GitHub"></i>
+                            
+                            <span>GitHub</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  target="_blank"  class="" href="http://weibo.com/1764592400">
+                            
+                                <i class="iconfont icon-weibo" title="微博"></i>
+                            
+                            <span>微博</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  class="" href="/rss.xml">
+                            
+                                <i class="iconfont icon-rss" title="RSS"></i>
+                            
+                            <span>RSS</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    </div>
+</nav>
+
+
+
+<div id="header">
+	<div class="btn-bar"><i></i></div>
+	<h1><a href="/">whoyu</a></h1>
+	<a class="me" href="/about/">
+        <img src="/static/images/gravatar.jpg" alt="whoyu" alt="whoyu">
+    </a>
+</div>
+<div id="sidebar-mask"></div>
+
+
+
+<div id="main">
+    <div class="wrap">
+        <div id="page-post">
+        	<article class="markdown">
+				<h1>
+					
+                        javascript 模块定义几种方式
+                    
+				</h1>
+				<p class="note-tags">
+					
+                        <a  href="/tags/javascript" data-tag="javascript">
+                            <code class="notebook">javascript</code>
+                        </a>
+                    
+                        <a  href="/tags/commonjs" data-tag="commonjs">
+                            <code class="notebook">commonjs</code>
+                        </a>
+                    
+                        <a  href="/tags/define" data-tag="define">
+                            <code class="notebook">define</code>
+                        </a>
+                    
+				</p>
+				<div class="content">
+					<p>兼容Commonjs、AMD 模块加载的写法<br><a id="more"></a></p>
+<p>如果模块定义包装很复杂，一般是工具生成的，比如webpack、browserify等。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*********** 定义模块的几种方式 *************/</span></span><br><span class="line"><span class="comment">// 方式1</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">define</span>) </span>&#123;</span><br><span class="line">    define([<span class="string">"jquery"</span>], <span class="function"><span class="keyword">function</span>(<span class="params">$</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> toastr = &#123;</span><br><span class="line">                a: <span class="number">1</span></span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> toastr</span><br><span class="line">        &#125;)();</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;(</span><br><span class="line">    <span class="keyword">typeof</span> define === <span class="string">"function"</span> &amp;&amp; define.amd ? define : <span class="function"><span class="keyword">function</span>(<span class="params">deps, factory</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="built_in">module</span> !== <span class="string">"undefined"</span> &amp;&amp; <span class="built_in">module</span>.exports) &#123;</span><br><span class="line">            <span class="built_in">module</span>.exports = factory(<span class="built_in">require</span>(<span class="string">"jquery"</span>))</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">window</span>[<span class="string">"toastr"</span>] = factory(<span class="built_in">window</span>[<span class="string">"jQuery"</span>])</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式2</span></span><br><span class="line"></span><br><span class="line">!<span class="function"><span class="keyword">function</span>(<span class="params">e, t</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">typeof</span> <span class="built_in">module</span> != <span class="string">"undefined"</span> &amp;&amp; <span class="built_in">module</span>.exports ? <span class="built_in">module</span>.exports = t() : <span class="keyword">typeof</span> define == <span class="string">"function"</span> &amp;&amp; define.amd ? define(e, t) : <span class="keyword">this</span>[e] = t()</span><br><span class="line">&#125;(<span class="string">"bowser"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> n = &#123;<span class="attr">a</span>:<span class="number">1</span>&#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> n;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式3</span></span><br><span class="line"></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">root, factory</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> define === <span class="string">"function"</span> &amp;&amp; define.amd) &#123;</span><br><span class="line">        define([], factory)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> exports === <span class="string">"object"</span>) &#123;</span><br><span class="line">            <span class="built_in">module</span>.exports = factory()</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            root.YUVCanvas = factory()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;(<span class="keyword">this</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">YUVCanvas</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> YUVCanvas</span><br><span class="line">&#125;));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式4</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">f</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> exports === <span class="string">"object"</span> &amp;&amp; <span class="keyword">typeof</span> <span class="built_in">module</span> !== <span class="string">"undefined"</span>) &#123;</span><br><span class="line">        <span class="built_in">module</span>.exports = f()</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> define === <span class="string">"function"</span> &amp;&amp; define.amd) &#123;</span><br><span class="line">            define([], f)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">var</span> g;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="built_in">window</span> !== <span class="string">"undefined"</span>) &#123;</span><br><span class="line">                g = <span class="built_in">window</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">typeof</span> global !== <span class="string">"undefined"</span>) &#123;</span><br><span class="line">                    g = global</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> (<span class="keyword">typeof</span> self !== <span class="string">"undefined"</span>) &#123;</span><br><span class="line">                        g = self</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        g = <span class="keyword">this</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            g.AV = f()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> define, <span class="built_in">module</span>, exports;</span><br><span class="line">    <span class="keyword">return</span> (<span class="function"><span class="keyword">function</span> <span class="title">e</span>(<span class="params">list, cache, start</span>) </span>&#123;<span class="comment">//start =&gt;自动加载 [1,2]</span></span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">load</span>(<span class="params">o, u</span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(o);</span><br><span class="line">            <span class="keyword">if</span> (!cache[o]) &#123;<span class="comment">// 缓存容器</span></span><br><span class="line">                <span class="keyword">if</span> (!list[o]) &#123;<span class="comment">// 如果下面的列表中没有定义，</span></span><br><span class="line"></span><br><span class="line">                    <span class="comment">// 如果require已经定义了</span></span><br><span class="line">                    <span class="keyword">var</span> <span class="built_in">require</span> = <span class="keyword">typeof</span> <span class="built_in">require</span> == <span class="string">"function"</span> &amp;&amp; <span class="built_in">require</span>;</span><br><span class="line">                    <span class="keyword">if</span> (!u &amp;&amp; <span class="built_in">require</span>) &#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="built_in">require</span>(o, !<span class="number">0</span>)</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (i) &#123;</span><br><span class="line">                        <span class="keyword">return</span> i(o, !<span class="number">0</span>)</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">var</span> error = <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"Cannot find module '"</span> + o + <span class="string">"'"</span>);</span><br><span class="line">                    <span class="keyword">throw</span> error.code = <span class="string">"MODULE_NOT_FOUND"</span>,</span><br><span class="line">                    error</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">var</span> l = cache[o] = &#123;</span><br><span class="line">                    exports: &#123;&#125;</span><br><span class="line">                &#125;;</span><br><span class="line">                list[o][<span class="number">0</span>].call(l.exports, <span class="function"><span class="keyword">function</span>(<span class="params">key</span>) </span>&#123;</span><br><span class="line">                    <span class="comment">// 加载依赖</span></span><br><span class="line">                    <span class="keyword">var</span> n = list[o][<span class="number">1</span>][key];</span><br><span class="line">                    <span class="keyword">return</span> load(n ? n : key)</span><br><span class="line">                &#125;, l, l.exports, e, list, cache, start)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> cache[o].exports</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 如果require已经定义了</span></span><br><span class="line">        <span class="keyword">var</span> i = <span class="keyword">typeof</span> <span class="built_in">require</span> == <span class="string">"function"</span> &amp;&amp; <span class="built_in">require</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> o = <span class="number">0</span>; o &lt; start.length; o++) &#123;</span><br><span class="line">            load(start[o])</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> load</span><br><span class="line">    &#125;)(&#123;</span><br><span class="line">        <span class="number">1</span>: [<span class="function"><span class="keyword">function</span>(<span class="params">require, module, exports</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> key, val, _ref;</span><br><span class="line"></span><br><span class="line">            _ref = <span class="built_in">require</span>(<span class="string">"./src/base"</span>);</span><br><span class="line">            <span class="keyword">for</span> (key <span class="keyword">in</span> _ref) &#123;</span><br><span class="line">                val = _ref[key];</span><br><span class="line">                exports[key] = val</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">console</span>.log(exports);</span><br><span class="line">        &#125;</span><br><span class="line">        , &#123;<span class="comment">// 在这里处理依赖</span></span><br><span class="line">            <span class="string">"./src/base"</span>: <span class="number">2</span>,</span><br><span class="line"></span><br><span class="line">        &#125;],</span><br><span class="line">        <span class="number">2</span>: [<span class="function"><span class="keyword">function</span>(<span class="params">require, module, exports</span>) </span>&#123;</span><br><span class="line">            exports.BufferList = <span class="built_in">require</span>(<span class="string">"./core/bufferlist"</span>);</span><br><span class="line"></span><br><span class="line">        &#125;,&#123;</span><br><span class="line">            <span class="string">"./core/bufferlist"</span>: <span class="number">3</span>,</span><br><span class="line">        &#125;],</span><br><span class="line">        <span class="number">3</span>: [<span class="function"><span class="keyword">function</span>(<span class="params">require, module, exports</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> BufferList;</span><br><span class="line">            BufferList = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                <span class="function"><span class="keyword">function</span> <span class="title">BufferList</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">this</span>.first = <span class="literal">null</span> ;</span><br><span class="line">                    <span class="keyword">this</span>.last = <span class="literal">null</span> ;</span><br><span class="line">                    <span class="keyword">this</span>.numBuffers = <span class="number">0</span>;</span><br><span class="line">                    <span class="keyword">this</span>.availableBytes = <span class="number">0</span>;</span><br><span class="line">                    <span class="keyword">this</span>.availableBuffers = <span class="number">0</span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> BufferList</span><br><span class="line">            &#125;)();</span><br><span class="line">            <span class="built_in">module</span>.exports = BufferList</span><br><span class="line">        &#125;</span><br><span class="line">        , &#123;&#125;]</span><br><span class="line">               </span><br><span class="line">    &#125;, &#123;&#125;, [<span class="number">1</span>])(<span class="number">1</span>);  <span class="comment">//最后一个1 表示手动load 模块1</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+				</div>
+                <p> -- <acronym title="End of File">EOF</acronym> -- </p>
+                <div class="post-info">
+                    <p>本文链接：<a href="http://whoyu.com/post/2016/11/javascript-module-define/">http://whoyu.com/post/2016/11/javascript-module-define/</a></p>
+                    <p>发表于<i>2016-11-02 11:56:57</i>，并被添加「
+                            
+                            <a  href="/tags/javascript" data-tag="javascript">javascript</a>
+                        
+                            ，
+                            <a  href="/tags/commonjs" data-tag="commonjs">commonjs</a>
+                        
+                            ，
+                            <a  href="/tags/define" data-tag="define">define</a>
+                        」标签，最后修改于<i>2017-03-02 21:01:46</i></p>
+                </div>
+			</article>
+            
+                <div id="comments">
+	<h2>Comments</h2>
+	<div id="disqus_thread">
+	    评论加载中...<br><br>注：如果长时间无法加载，请针对 disq.us | disquscdn.com | disqus.com 启用代理。
+	</div>
+</div>
+            
+        </div>
+    </div>
+</div>
+
+    <script>
+         var disqus_config = function () {
+             this.page.url = 'http://whoyu.com/post/2016/11/javascript-module-define/';
+             this.page.identifier = 'post/2016/11/javascript-module-define/';
+         };
+        (function() {
+
+            var d = document, s = d.createElement('script');
+            var disqus_shortname = 'whoyu';
+            s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+
+            setTimeout(function(){
+                (d.head || d.body).appendChild(s);
+            },100);
+        })();
+    </script>
+
+
+<script src="/static/js/meizi.js"></script>
+</body>
+</html>

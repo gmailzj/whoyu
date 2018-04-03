@@ -1,0 +1,218 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="author" content="gmailzj">
+	
+        <link rel="icon" href="/static/images/favicon.png">
+    
+    
+    
+    	<meta name="keyword" content="javascript,fp,curry">
+    
+    
+    	<meta name="description" content="javascript中的curry函数原理分析">
+    
+	<title>javascript中的通用curry函数 实现原理 - whoyu</title>
+	<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+
+
+<nav  id="sidebar" class=" behavior_1">
+    <div class="wrap">
+    	
+    		<div class="profile">
+    			<a href="/"><img src="/static/images/gravatar.jpg" alt="whoyu"></a>
+    			<span>whoyu</span>
+    		</div>
+    	
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  class="" href="/">
+                            
+                                <i class="iconfont icon-home" title="首页"></i>
+                            
+                            <span>首页</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/archive/">
+                            
+                                <i class="iconfont icon-archive" title="归档"></i>
+                            
+                            <span>归档</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/tags/">
+                            
+                                <i class="iconfont icon-tags" title="标签"></i>
+                            
+                            <span>标签</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/about/">
+                            
+                                <i class="iconfont icon-user" title="关于"></i>
+                            
+                            <span>关于</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/links/">
+                            
+                                <i class="iconfont icon-link" title="友链"></i>
+                            
+                            <span>友链</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  target="_blank"  class="" href="https://github.com/gmailzj">
+                            
+                                <i class="iconfont icon-github" title="GitHub"></i>
+                            
+                            <span>GitHub</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  target="_blank"  class="" href="http://weibo.com/1764592400">
+                            
+                                <i class="iconfont icon-weibo" title="微博"></i>
+                            
+                            <span>微博</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  class="" href="/rss.xml">
+                            
+                                <i class="iconfont icon-rss" title="RSS"></i>
+                            
+                            <span>RSS</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    </div>
+</nav>
+
+
+
+<div id="header">
+	<div class="btn-bar"><i></i></div>
+	<h1><a href="/">whoyu</a></h1>
+	<a class="me" href="/about/">
+        <img src="/static/images/gravatar.jpg" alt="whoyu" alt="whoyu">
+    </a>
+</div>
+<div id="sidebar-mask"></div>
+
+
+
+<div id="main">
+    <div class="wrap">
+        <div id="page-post">
+        	<article class="markdown">
+				<h1>
+					
+                        javascript中的通用curry函数 实现原理
+                    
+				</h1>
+				<p class="note-tags">
+					
+                        <a  href="/tags/javascript" data-tag="javascript">
+                            <code class="notebook">javascript</code>
+                        </a>
+                    
+                        <a  href="/tags/fp" data-tag="fp">
+                            <code class="notebook">fp</code>
+                        </a>
+                    
+                        <a  href="/tags/curry" data-tag="curry">
+                            <code class="notebook">curry</code>
+                        </a>
+                    
+				</p>
+				<div class="content">
+					<p>javascript中的curry函数 原理分析<br><a id="more"></a></p>
+<h2 id="curry-柯里化"><a href="#curry-柯里化" class="headerlink" title="curry(柯里化)"></a>curry(柯里化)</h2><h3 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h3><p>函数的柯里化概念很简单：只传递给函数一部分参数来调用它，让它返回一个函数去处理剩下的参数。</p>
+<p>你可以一次性地调用 curry 函数，也可以每次只传一个参数分多次调用。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> add = <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> increment = add(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">var</span> addTen = add(<span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">increment(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line">addTen(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 12</span></span><br></pre></td></tr></table></figure>
+<p>定义了一个 <code>add</code> 函数，它接受一个参数并返回一个新的函数。调用 <code>add</code> 之后，返回的函数就通过闭包的方式记住了 <code>add</code> 的第一个参数。但是这种写法是针对特定的某个函数，不够通用。</p>
+<h3 id="通用用法"><a href="#通用用法" class="headerlink" title="通用用法"></a>通用用法</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">curry</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">            <span class="comment">// 获取需要curry的函数fn的参数个数，闭包存储起来</span></span><br><span class="line">            <span class="comment">// 闭包 1</span></span><br><span class="line">            <span class="keyword">var</span> _argLen = fn.length</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 实际返回的wrap函数</span></span><br><span class="line">            <span class="function"><span class="keyword">function</span> <span class="title">wrap</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                <span class="comment">// 第一次 获取到实参</span></span><br><span class="line">                <span class="comment">// 闭包 2</span></span><br><span class="line">                <span class="comment">// 进一步优化，可以将这行提到外面，这样curry函数在执行的时候就能传递fn的参数了, function curry(fn, args)</span></span><br><span class="line">                <span class="keyword">var</span> _args = [].slice.call(<span class="built_in">arguments</span>);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 如果实参长度不匹配形参数目，继续返回函数，否则返回结果</span></span><br><span class="line"></span><br><span class="line">                <span class="function"><span class="keyword">function</span> <span class="title">act</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                    <span class="comment">// 合并参数</span></span><br><span class="line">                    _args = _args.concat([].slice.call(<span class="built_in">arguments</span>))</span><br><span class="line">                    <span class="keyword">if</span> (_args.length === _argLen) &#123;</span><br><span class="line">                        <span class="keyword">return</span> fn.apply(<span class="literal">null</span>, _args)</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">return</span> act;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 如果实际参数和fn函数定义时候的形参数目一样，说明所有的参数都提供了，直接求值</span></span><br><span class="line">                <span class="keyword">if</span> (_args.length === _argLen) &#123;</span><br><span class="line">                    <span class="keyword">return</span> fn.apply(<span class="literal">null</span>, _args)</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 前端console的时候打印显示fn函数</span></span><br><span class="line">                act.toString = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">return</span> fn.toString()</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> act</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> wrap</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> abc = <span class="function"><span class="keyword">function</span>(<span class="params">a, b, c</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> [a, b, c]</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> curried = curry(abc)</span><br><span class="line"></span><br><span class="line">        <span class="built_in">console</span>.log(curried(<span class="number">1</span>)(<span class="number">2</span>)(<span class="number">3</span>))</span><br><span class="line">            <span class="comment">// =&gt; [1, 2, 3]</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">console</span>.log(curried(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>))</span><br><span class="line">            <span class="comment">// =&gt; [1, 2, 3]</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">console</span>.log(curried(<span class="number">1</span>, <span class="number">2</span>)(<span class="number">3</span>))</span><br><span class="line">            <span class="comment">// =&gt; [1, 2, 3]</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">console</span>.log(curried(<span class="number">1</span>)(<span class="number">2</span>, <span class="number">3</span>))</span><br><span class="line">            <span class="comment">// =&gt; [1, 2, 3]</span></span><br></pre></td></tr></table></figure>
+<p>然后上面基本用法那里的例子可以这样来写了</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> add = <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> curried = curry(add);</span><br><span class="line"><span class="keyword">var</span> increment = curried(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">var</span> addTen = curried(<span class="number">10</span>);</span><br><span class="line">increment(<span class="number">2</span>)</span><br><span class="line">addTen(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+				</div>
+                <p> -- <acronym title="End of File">EOF</acronym> -- </p>
+                <div class="post-info">
+                    <p>本文链接：<a href="http://whoyu.com/post/2017/08/curry-in-javascript/">http://whoyu.com/post/2017/08/curry-in-javascript/</a></p>
+                    <p>发表于<i>2017-08-02 20:30:57</i>，并被添加「
+                            
+                            <a  href="/tags/javascript" data-tag="javascript">javascript</a>
+                        
+                            ，
+                            <a  href="/tags/fp" data-tag="fp">fp</a>
+                        
+                            ，
+                            <a  href="/tags/curry" data-tag="curry">curry</a>
+                        」标签，最后修改于<i>2018-04-03 16:50:23</i></p>
+                </div>
+			</article>
+            
+                <div id="comments">
+	<h2>Comments</h2>
+	<div id="disqus_thread">
+	    评论加载中...<br><br>注：如果长时间无法加载，请针对 disq.us | disquscdn.com | disqus.com 启用代理。
+	</div>
+</div>
+            
+        </div>
+    </div>
+</div>
+
+    <script>
+         var disqus_config = function () {
+             this.page.url = 'http://whoyu.com/post/2017/08/curry-in-javascript/';
+             this.page.identifier = 'post/2017/08/curry-in-javascript/';
+         };
+        (function() {
+
+            var d = document, s = d.createElement('script');
+            var disqus_shortname = 'whoyu';
+            s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+
+            setTimeout(function(){
+                (d.head || d.body).appendChild(s);
+            },100);
+        })();
+    </script>
+
+
+<script src="/static/js/meizi.js"></script>
+</body>
+</html>

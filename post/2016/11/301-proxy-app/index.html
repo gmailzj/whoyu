@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="author" content="gmailzj">
+	
+        <link rel="icon" href="/static/images/favicon.png">
+    
+    
+    
+    	<meta name="keyword" content="fiddler">
+    
+    
+    	<meta name="description" content="fiddler301跳转设置有时候我们需要在某个客户端的webview打开我们的网页地址来测试一些功能，但是app没有提供这个入口给你，这种场景可以用到fiddler代理返回301或者302">
+    
+	<title>fiddler 301 跳转设置 - whoyu</title>
+	<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+
+
+<nav  id="sidebar" class=" behavior_1">
+    <div class="wrap">
+    	
+    		<div class="profile">
+    			<a href="/"><img src="/static/images/gravatar.jpg" alt="whoyu"></a>
+    			<span>whoyu</span>
+    		</div>
+    	
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  class="" href="/">
+                            
+                                <i class="iconfont icon-home" title="首页"></i>
+                            
+                            <span>首页</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/archive/">
+                            
+                                <i class="iconfont icon-archive" title="归档"></i>
+                            
+                            <span>归档</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/tags/">
+                            
+                                <i class="iconfont icon-tags" title="标签"></i>
+                            
+                            <span>标签</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/about/">
+                            
+                                <i class="iconfont icon-user" title="关于"></i>
+                            
+                            <span>关于</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/links/">
+                            
+                                <i class="iconfont icon-link" title="友链"></i>
+                            
+                            <span>友链</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  target="_blank"  class="" href="https://github.com/gmailzj">
+                            
+                                <i class="iconfont icon-github" title="GitHub"></i>
+                            
+                            <span>GitHub</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  target="_blank"  class="" href="http://weibo.com/1764592400">
+                            
+                                <i class="iconfont icon-weibo" title="微博"></i>
+                            
+                            <span>微博</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  class="" href="/rss.xml">
+                            
+                                <i class="iconfont icon-rss" title="RSS"></i>
+                            
+                            <span>RSS</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    </div>
+</nav>
+
+
+
+<div id="header">
+	<div class="btn-bar"><i></i></div>
+	<h1><a href="/">whoyu</a></h1>
+	<a class="me" href="/about/">
+        <img src="/static/images/gravatar.jpg" alt="whoyu" alt="whoyu">
+    </a>
+</div>
+<div id="sidebar-mask"></div>
+
+
+
+<div id="main">
+    <div class="wrap">
+        <div id="page-post">
+        	<article class="markdown">
+				<h1>
+					
+                        fiddler 301 跳转设置
+                    
+				</h1>
+				<p class="note-tags">
+					
+                        <a  href="/tags/fiddler" data-tag="fiddler">
+                            <code class="notebook">fiddler</code>
+                        </a>
+                    
+				</p>
+				<div class="content">
+					<p><strong>fiddler 301 跳转设置</strong><br>有时候我们需要在某个客户端的webview打开我们的网页地址来测试一些功能，但是app没有提供这个入口给你，这种场景可以用到fiddler代理返回301或者302<br><a id="more"></a></p>
+<p>第一种 在app的某个列表入口<br>断点 修改response的值，在app里面的某个入口请求json或者页面里面修改返回值</p>
+<p>第二种<br>autoResponder</p>
+<p>简单的版本就是通过<em>redir
+</em>redir:<a href="http://192.168.0.132:3000/android/" target="_blank" rel="noopener">http://192.168.0.132:3000/android/</a><br>这种情况的httpcode就是307，一般都支持(有些webview可能不支持)</p>
+<p>复杂一点的就需要修改文件</p>
+<p>修改fiddler安装所在目录的ResponseTemplates<br>302_Redirect.dat,需要管理员权限(或者已这个为模板，自己新建一个文件，随便放哪)</p>
+<p>HTTP/1.1 301 Moved Permanently<br>FiddlerTemplate: True<br>Date: Fri, 25 Nov 2016 07:51:26 GMT<br>Location: <a href="http://192.168.0.132:3000/android/" target="_blank" rel="noopener">http://192.168.0.132:3000/android/</a><br>Content-Length: 0</p>
+<p>HTTP/1.1 302 Moved Temporarily<br>FiddlerTemplate: True<br>Date: Fri, 25 Nov 2016 07:51:26 GMT<br>Location: <a href="http://192.168.0.132:3000/android/" target="_blank" rel="noopener">http://192.168.0.132:3000/android/</a><br>Content-Length: 0</p>
+<p>第三种<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">fiddler script custom 脚本</span><br><span class="line">点击菜单Rules-&gt;Customize Rules</span><br><span class="line">在如下函数中修改http应答：</span><br><span class="line"><span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">OnBeforeResponse</span>(<span class="params">oSession: Session</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (m_Hide304s &amp;&amp; oSession.responseCode == <span class="number">304</span>) &#123;</span><br><span class="line">        oSession[<span class="string">"ui-hide"</span>] = <span class="string">"true"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (oSession.host.indexOf(<span class="string">"p.21kunpeng.com"</span>) &gt; <span class="number">-1</span>) &#123;</span><br><span class="line">        <span class="comment">//oSession.responseCode = 301</span></span><br><span class="line">        <span class="comment">//oSession.oResponse.headers["Status Code"] = "301 Moved Permanently";</span></span><br><span class="line">        <span class="comment">//oSession.oResponse.headers["Location"] = "http://m.163.com";</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">如果还需要修改请求的参数 OnBeforeRequest 方法中</span><br><span class="line"></span><br><span class="line">在如下函数中修改http请求头：</span><br><span class="line"><span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">OnBeforeRequest</span>(<span class="params">oSession: Session</span>)</span></span><br><span class="line"><span class="function"><span class="title">if</span> (<span class="params">oSession.host.indexOf(<span class="string">"xx.com"</span></span>) &gt; -1) </span>&#123;</span><br><span class="line"> <span class="comment">// 修改session中的显示样式</span></span><br><span class="line"> oSession[<span class="string">"ui-color"</span>] = <span class="string">"orange"</span>;</span><br><span class="line"> <span class="comment">// 移除http头部中的MQB-X5-Referer字段</span></span><br><span class="line"> oSession.oRequest.headers.Remove(<span class="string">"MQB-X5-Referer"</span>);</span><br><span class="line"> <span class="comment">// 修改http头部中的Cache-Control字段</span></span><br><span class="line"> oSession.oRequest[<span class="string">"Cache-Control"</span>] = <span class="string">"no-cache"</span>;</span><br><span class="line"> <span class="comment">// 修改host</span></span><br><span class="line"> oSession.host = <span class="string">"xx.com"</span>;</span><br><span class="line"> <span class="comment">// 修改Origin字段</span></span><br><span class="line"> oSession.oRequest[<span class="string">"Origin"</span>] = <span class="string">"xx.com"</span>;</span><br><span class="line"> <span class="comment">// 删除所有的cookie</span></span><br><span class="line"> oSession.oRequest.headers.Remove(<span class="string">"Cookie"</span>);</span><br><span class="line"> <span class="comment">// 新建cookie</span></span><br><span class="line"> oSession.oRequest.headers.Add(<span class="string">"Cookie"</span>, <span class="string">"username=yulesyu;"</span>);</span><br><span class="line"> <span class="comment">// 修改Referer字段</span></span><br><span class="line"> oSession.oRequest[<span class="string">"Referer"</span>] = <span class="string">"http:www.163.com/index.php"</span>;</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 获取Request中的body字符串</span></span><br><span class="line"> <span class="keyword">var</span> strBody=oSession.GetRequestBodyAsString();</span><br><span class="line"> <span class="comment">// 用正则表达式或者replace方法去修改string</span></span><br><span class="line"> strBody=strBody.replace(<span class="string">"1111"</span>,<span class="string">"2222"</span>);</span><br><span class="line"> <span class="comment">// 弹个对话框检查下修改后的body</span></span><br><span class="line"> FiddlerObject.alert(strBody);</span><br><span class="line"> <span class="comment">// 将修改后的body，重新写回Request中</span></span><br><span class="line"> oSession.utilSetRequestBody(strBody);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+				</div>
+                <p> -- <acronym title="End of File">EOF</acronym> -- </p>
+                <div class="post-info">
+                    <p>本文链接：<a href="http://whoyu.com/post/2016/11/301-proxy-app/">http://whoyu.com/post/2016/11/301-proxy-app/</a></p>
+                    <p>发表于<i>2016-11-25 15:56:57</i>，并被添加「
+                            
+                            <a  href="/tags/fiddler" data-tag="fiddler">fiddler</a>
+                        」标签，最后修改于<i>2016-11-25 19:37:21</i></p>
+                </div>
+			</article>
+            
+                <div id="comments">
+	<h2>Comments</h2>
+	<div id="disqus_thread">
+	    评论加载中...<br><br>注：如果长时间无法加载，请针对 disq.us | disquscdn.com | disqus.com 启用代理。
+	</div>
+</div>
+            
+        </div>
+    </div>
+</div>
+
+    <script>
+         var disqus_config = function () {
+             this.page.url = 'http://whoyu.com/post/2016/11/301-proxy-app/';
+             this.page.identifier = 'post/2016/11/301-proxy-app/';
+         };
+        (function() {
+
+            var d = document, s = d.createElement('script');
+            var disqus_shortname = 'whoyu';
+            s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+
+            setTimeout(function(){
+                (d.head || d.body).appendChild(s);
+            },100);
+        })();
+    </script>
+
+
+<script src="/static/js/meizi.js"></script>
+</body>
+</html>

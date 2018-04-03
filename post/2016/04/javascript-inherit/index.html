@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="author" content="gmailzj">
+	
+        <link rel="icon" href="/static/images/favicon.png">
+    
+    
+    
+    	<meta name="keyword" content="javascript">
+    
+    
+    	<meta name="description" content="javascript中继承实现">
+    
+	<title>javascript-inherit - whoyu</title>
+	<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+
+
+<nav  id="sidebar" class=" behavior_1">
+    <div class="wrap">
+    	
+    		<div class="profile">
+    			<a href="/"><img src="/static/images/gravatar.jpg" alt="whoyu"></a>
+    			<span>whoyu</span>
+    		</div>
+    	
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  class="" href="/">
+                            
+                                <i class="iconfont icon-home" title="首页"></i>
+                            
+                            <span>首页</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/archive/">
+                            
+                                <i class="iconfont icon-archive" title="归档"></i>
+                            
+                            <span>归档</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/tags/">
+                            
+                                <i class="iconfont icon-tags" title="标签"></i>
+                            
+                            <span>标签</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/about/">
+                            
+                                <i class="iconfont icon-user" title="关于"></i>
+                            
+                            <span>关于</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/links/">
+                            
+                                <i class="iconfont icon-link" title="友链"></i>
+                            
+                            <span>友链</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  target="_blank"  class="" href="https://github.com/gmailzj">
+                            
+                                <i class="iconfont icon-github" title="GitHub"></i>
+                            
+                            <span>GitHub</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  target="_blank"  class="" href="http://weibo.com/1764592400">
+                            
+                                <i class="iconfont icon-weibo" title="微博"></i>
+                            
+                            <span>微博</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  class="" href="/rss.xml">
+                            
+                                <i class="iconfont icon-rss" title="RSS"></i>
+                            
+                            <span>RSS</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    </div>
+</nav>
+
+
+
+<div id="header">
+	<div class="btn-bar"><i></i></div>
+	<h1><a href="/">whoyu</a></h1>
+	<a class="me" href="/about/">
+        <img src="/static/images/gravatar.jpg" alt="whoyu" alt="whoyu">
+    </a>
+</div>
+<div id="sidebar-mask"></div>
+
+
+
+<div id="main">
+    <div class="wrap">
+        <div id="page-post">
+        	<article class="markdown">
+				<h1>
+					
+                        javascript-inherit
+                    
+				</h1>
+				<p class="note-tags">
+					
+                        <a  href="/tags/javascript" data-tag="javascript">
+                            <code class="notebook">javascript</code>
+                        </a>
+                    
+				</p>
+				<div class="content">
+					<p>javascript中继承实现<br><a id="more"></a></p>
+<p>javascript 继承**<br>1 在原型里面拓展方法和属性，一般都是方法，很少属性?<br>因为prototype里面的属性(也就是数据)是每个实例共享的，有写操作的时候每个实例之间会冲突、污染数据<br>写操作分为重新赋值(=)和增减数据(push)</p>
+<p>2 下面的Class.extend方法可以变一下，添加一个Class.create方法，这样类实例化的时候，就以下面的形式直接调用<br>var 类名= Class.extend({});//得到类<br>var obj =  类名.create();//得到实例<br>不用每次实例化 都new 类名。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* Simple JavaScript Inheritance</span></span><br><span class="line"><span class="comment"> * By John Resig http://ejohn.org/</span></span><br><span class="line"><span class="comment"> * MIT Licensed.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">// Inspired by base2 and Prototype</span></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> initializing = <span class="literal">false</span>, fnTest = <span class="regexp">/xyz/</span>.test(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;xyz;&#125;) ? <span class="regexp">/\b_super\b/</span> : <span class="regexp">/.*/</span>;</span><br><span class="line"> </span><br><span class="line">  <span class="comment">// The base Class implementation (does nothing)</span></span><br><span class="line">  <span class="comment">//基类构造函数</span></span><br><span class="line">  <span class="comment">//这里的this只的是window，这样Class就巧妙的变成全局作用域了</span></span><br><span class="line">  <span class="keyword">this</span>.Class = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;;</span><br><span class="line"> </span><br><span class="line">   <span class="comment">/*for循环用到的可以替换为一个局部函数func*/</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">func</span>(<span class="params">name, fn</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">          <span class="comment">// 将实例方法_super保护起来。</span></span><br><span class="line">          <span class="keyword">var</span> tmp = <span class="keyword">this</span>._super;<span class="comment">//比如子类有一个_super方法(一般不要这样定义)</span></span><br><span class="line">          <span class="comment">// 在执行子类的实例方法name时，添加另外一个实例方法_super，此方法指向父类的同名方法</span></span><br><span class="line">          <span class="keyword">this</span>._super = _super[name];<span class="comment">//因为fn在下面的apply执行的时候里面有用到this._super();这里相当于提前赋值</span></span><br><span class="line">          <span class="comment">// 执行子类的方法name，注意在方法体内this._super可以调用父类的同名方法</span></span><br><span class="line">          <span class="keyword">var</span> ret = fn.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);</span><br><span class="line"></span><br><span class="line">          <span class="keyword">this</span>._super = tmp;<span class="comment">//恢复实例方法_super</span></span><br><span class="line">          </span><br><span class="line">          <span class="comment">// 返回执行结果</span></span><br><span class="line">          <span class="keyword">return</span> ret;</span><br><span class="line">      &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// Create a new Class that inherits from this class</span></span><br><span class="line">  Class.extend = <span class="function"><span class="keyword">function</span>(<span class="params">prop</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//this 基类构造函数 一开始的时候就是全局的Class构造器，以后就代表基类</span></span><br><span class="line">    <span class="comment">//_super指的是基类的原型</span></span><br><span class="line">    <span class="keyword">var</span> _super = <span class="keyword">this</span>.prototype;</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">    initializing = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> prototype = <span class="keyword">new</span> <span class="keyword">this</span>();</span><br><span class="line">    initializing = <span class="literal">false</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//通过将子类的原型指向父类的一个实例对象来完成继承</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> name <span class="keyword">in</span> prop) &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      <span class="comment">//下面的逻辑运算部分</span></span><br><span class="line">      <span class="comment">// 如果父类和子类有同名方法，并且子类中此方法（name）通过_super调用了父类方法</span></span><br><span class="line">      <span class="comment">// -- 则重新定义此方法</span></span><br><span class="line">      prototype[name] = <span class="keyword">typeof</span> prop[name] == <span class="string">"function"</span> &amp;&amp;</span><br><span class="line">        <span class="keyword">typeof</span> _super[name] == <span class="string">"function"</span> &amp;&amp; fnTest.test(prop[name]) ?</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*可以替换为一个局部函数func 开始*/</span></span><br><span class="line">        (<span class="function"><span class="keyword">function</span>(<span class="params">name, fn</span>)</span>&#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> tmp = <span class="keyword">this</span>._super;</span><br><span class="line">            <span class="keyword">this</span>._super = _super[name];           </span><br><span class="line">            <span class="keyword">var</span> ret = fn.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);        </span><br><span class="line">            <span class="keyword">this</span>._super = tmp;<span class="comment">//</span></span><br><span class="line">            <span class="keyword">return</span> ret;</span><br><span class="line">          &#125;;</span><br><span class="line">        &#125;)(name, prop[name])</span><br><span class="line">        <span class="comment">/* fn(name, prop[name]); 可以替换为一个局部函数func 结束*/</span></span><br><span class="line">        :</span><br><span class="line">        prop[name];</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    <span class="comment">//构造器</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">Class</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 初始化操作</span></span><br><span class="line">      <span class="keyword">if</span> ( !initializing &amp;&amp; <span class="keyword">this</span>.init )</span><br><span class="line">        <span class="keyword">this</span>.init.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    <span class="comment">// 实现继承：子类的prototype指向父类的实例，最通用的继承手段</span></span><br><span class="line">    Class.prototype = prototype;</span><br><span class="line">   </span><br><span class="line">    <span class="comment">// 修正constructor指向错误</span></span><br><span class="line">    Class.prototype.constructor = Class;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// And make this class extendable</span></span><br><span class="line">    <span class="comment">// 子类自动获取extend方法，arguments.callee指向当前正在执行的函数，为下一个继承做准备</span></span><br><span class="line">    Class.extend = <span class="built_in">arguments</span>.callee;</span><br><span class="line">   </span><br><span class="line">    <span class="keyword">return</span> Class;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+				</div>
+                <p> -- <acronym title="End of File">EOF</acronym> -- </p>
+                <div class="post-info">
+                    <p>本文链接：<a href="http://whoyu.com/post/2016/04/javascript-inherit/">http://whoyu.com/post/2016/04/javascript-inherit/</a></p>
+                    <p>发表于<i>2016-04-27 15:56:57</i>，并被添加「
+                            
+                            <a  href="/tags/javascript" data-tag="javascript">javascript</a>
+                        」标签，最后修改于<i>2018-04-03 16:39:17</i></p>
+                </div>
+			</article>
+            
+                <div id="comments">
+	<h2>Comments</h2>
+	<div id="disqus_thread">
+	    评论加载中...<br><br>注：如果长时间无法加载，请针对 disq.us | disquscdn.com | disqus.com 启用代理。
+	</div>
+</div>
+            
+        </div>
+    </div>
+</div>
+
+    <script>
+         var disqus_config = function () {
+             this.page.url = 'http://whoyu.com/post/2016/04/javascript-inherit/';
+             this.page.identifier = 'post/2016/04/javascript-inherit/';
+         };
+        (function() {
+
+            var d = document, s = d.createElement('script');
+            var disqus_shortname = 'whoyu';
+            s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+
+            setTimeout(function(){
+                (d.head || d.body).appendChild(s);
+            },100);
+        })();
+    </script>
+
+
+<script src="/static/js/meizi.js"></script>
+</body>
+</html>

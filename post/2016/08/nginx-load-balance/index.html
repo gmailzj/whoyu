@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="author" content="gmailzj">
+	
+        <link rel="icon" href="/static/images/favicon.png">
+    
+    
+    
+    	<meta name="keyword" content="nginx">
+    
+    
+    	<meta name="description" content="如果有多台webapp服务器，常常要用到nginx的反向代理负载均衡;同时有些页面就算是动态的，只要是实时性要求不高的，也可以使用缓存策略，比如没有登录的用户看到的首页,局部不想缓存的通过ajax来渲染。">
+    
+	<title>nginx配置负载均衡和CGI 缓存 - whoyu</title>
+	<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+
+
+<nav  id="sidebar" class=" behavior_1">
+    <div class="wrap">
+    	
+    		<div class="profile">
+    			<a href="/"><img src="/static/images/gravatar.jpg" alt="whoyu"></a>
+    			<span>whoyu</span>
+    		</div>
+    	
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  class="" href="/">
+                            
+                                <i class="iconfont icon-home" title="首页"></i>
+                            
+                            <span>首页</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/archive/">
+                            
+                                <i class="iconfont icon-archive" title="归档"></i>
+                            
+                            <span>归档</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/tags/">
+                            
+                                <i class="iconfont icon-tags" title="标签"></i>
+                            
+                            <span>标签</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/about/">
+                            
+                                <i class="iconfont icon-user" title="关于"></i>
+                            
+                            <span>关于</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/links/">
+                            
+                                <i class="iconfont icon-link" title="友链"></i>
+                            
+                            <span>友链</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  target="_blank"  class="" href="https://github.com/gmailzj">
+                            
+                                <i class="iconfont icon-github" title="GitHub"></i>
+                            
+                            <span>GitHub</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  target="_blank"  class="" href="http://weibo.com/1764592400">
+                            
+                                <i class="iconfont icon-weibo" title="微博"></i>
+                            
+                            <span>微博</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  class="" href="/rss.xml">
+                            
+                                <i class="iconfont icon-rss" title="RSS"></i>
+                            
+                            <span>RSS</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    </div>
+</nav>
+
+
+
+<div id="header">
+	<div class="btn-bar"><i></i></div>
+	<h1><a href="/">whoyu</a></h1>
+	<a class="me" href="/about/">
+        <img src="/static/images/gravatar.jpg" alt="whoyu" alt="whoyu">
+    </a>
+</div>
+<div id="sidebar-mask"></div>
+
+
+
+<div id="main">
+    <div class="wrap">
+        <div id="page-post">
+        	<article class="markdown">
+				<h1>
+					
+                        nginx配置负载均衡和CGI 缓存
+                    
+				</h1>
+				<p class="note-tags">
+					
+                        <a  href="/tags/nginx" data-tag="nginx">
+                            <code class="notebook">nginx</code>
+                        </a>
+                    
+				</p>
+				<div class="content">
+					<p>如果有多台webapp服务器，常常要用到nginx的反向代理负载均衡;同时有些页面就算是动态的，只要是实时性要求不高的，<br>也可以使用缓存策略，比如没有登录的用户看到的首页, 局部不想缓存的通过ajax来渲染。<br><a id="more"></a><br><figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="comment"># !缓存文件存放目录</span></span><br><span class="line"><span class="comment"># levels    缓存层次</span></span><br><span class="line"><span class="comment"># keys_zone 缓存空间名和共享内存大小(热点内容放在内存)</span></span><br><span class="line"><span class="comment"># inactive  失效时间, 1d = 1天</span></span><br><span class="line"><span class="comment"># max_size  最大缓存空间(硬盘占用)</span></span><br><span class="line"><span class="attribute">proxy_cache_path</span> /data/vhosts/xxx.com/cache/cache_dir/ levels=<span class="number">1</span>:<span class="number">2</span> keys_zone=xiu:<span class="number">10m</span> inactive=<span class="number">2h</span> max_size=<span class="number">2g</span>;</span><br><span class="line"></span><br><span class="line"><span class="attribute">upstream</span> server_self &#123;</span><br><span class="line">    <span class="attribute">server</span> localhost:<span class="number">8081</span> fail_timeout=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="attribute">upstream</span> server_multi &#123;</span><br><span class="line">    <span class="attribute">server</span> <span class="number">61</span>.<span class="number">128</span>.<span class="number">196</span>.xxx:<span class="number">80</span>  weight=<span class="number">4</span>;</span><br><span class="line">    <span class="attribute">server</span> <span class="number">61</span>.<span class="number">128</span>.<span class="number">196</span>.xxx:<span class="number">80</span>  weight=<span class="number">2</span>;</span><br><span class="line">    <span class="attribute">server</span> <span class="number">113</span>.<span class="number">207</span>.<span class="number">31</span>.xxx:<span class="number">80</span>   weight=<span class="number">4</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> xxx.com;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">rewrite</span><span class="regexp"> ^(.*)</span> http://www.xxx.com<span class="variable">$1</span> <span class="literal">permanent</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> www.xxx.com;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">proxy_read_timeout</span>      <span class="number">300s</span>;</span><br><span class="line">    <span class="attribute">proxy_send_timeout</span>      <span class="number">300s</span>;</span><br><span class="line">    <span class="attribute">proxy_connect_timeout</span>   <span class="number">300s</span>;</span><br><span class="line">    <span class="attribute">proxy_redirect</span>          <span class="literal">off</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">proxy_set_header</span>    Host                <span class="variable">$http_host</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span>    X-Real-IP           <span class="variable">$remote_addr</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span>    X-Forwarded-For     <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span>    X-Forwarded-Proto   <span class="variable">$scheme</span>;</span><br><span class="line">    <span class="attribute">proxy_set_header</span>    X-Frame-Options     SAMEORIGIN;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">proxy_cache</span>             xiu;</span><br><span class="line">    <span class="comment"># 缓存触发的方法 HEADER, GET, POST 中的一个或多个</span></span><br><span class="line">    <span class="attribute">proxy_cache_methods</span>     GET;</span><br><span class="line">    <span class="comment"># 生成的缓存名称的 key 的名字</span></span><br><span class="line">    <span class="comment"># $scheme https/http</span></span><br><span class="line">    <span class="comment"># $request_method 请求方法,基于上面的设置,这里为GET</span></span><br><span class="line">    <span class="comment"># $host 主机</span></span><br><span class="line">    <span class="comment"># $request_uri 请求地址</span></span><br><span class="line">    <span class="attribute">proxy_cache_key</span>         <span class="string">"<span class="variable">$scheme</span><span class="variable">$request_method</span><span class="variable">$host</span><span class="variable">$request_uri</span>"</span>;</span><br><span class="line">    <span class="comment"># 生效值: 即代理目标的状态码以及缓存时间</span></span><br><span class="line">    <span class="attribute">proxy_cache_valid</span>       <span class="number">200</span> <span class="number">302</span> <span class="number">1h</span>;</span><br><span class="line">    <span class="comment"># 确定缓存成为过期数据的情况</span></span><br><span class="line">    <span class="attribute">proxy_cache_use_stale</span>   <span class="literal">error</span> timeout invalid_header http_500;</span><br><span class="line">    <span class="comment"># 请求过多少次相同的URL后, 缓存将开始</span></span><br><span class="line">    <span class="attribute">proxy_cache_min_uses</span>    <span class="number">1</span>;</span><br><span class="line">    <span class="comment"># 关闭缓存</span></span><br><span class="line">    <span class="attribute">proxy_cache_bypass</span>      <span class="variable">$cookie_userid</span>;</span><br><span class="line">    <span class="comment"># proxy_no_cache          $cookie_nocache;</span></span><br><span class="line">    <span class="comment"># 发送头信息到客户端 - 一般是浏览器</span></span><br><span class="line">    <span class="attribute">add_header</span>              X-Cache <span class="string">"<span class="variable">$upstream_cache_status</span>"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">location</span> / &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://server_multi;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">location</span> /user/ &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://server_self;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">location</span> /detect-speed/start &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://server_self;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">access_log</span>  <span class="literal">off</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span>       <span class="number">8081</span>;</span><br><span class="line">    <span class="attribute">server_name</span>  www.xxx.com;</span><br><span class="line">    <span class="attribute">index</span> index.html index.htm index.php;</span><br><span class="line">    <span class="attribute">root</span> /data/vhosts/xxx.com/frontend/web;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">location</span> / &#123;</span><br><span class="line">        <span class="comment">#auth_basic "name and passwd";</span></span><br><span class="line">        <span class="comment">#auth_basic_user_file htpasswd; </span></span><br><span class="line">        <span class="comment">#rewrite favicon favicon.ico  last;</span></span><br><span class="line">        <span class="comment">#rewrite favicon.ico  favicon.ico  last;</span></span><br><span class="line">        <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.php?<span class="variable">$args</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">location</span> <span class="regexp">~ .*\.(php)?$</span></span><br><span class="line"><span class="regexp"></span>    &#123;</span><br><span class="line">        <span class="comment">#fastcgi_pass  127.0.0.1:9000;</span></span><br><span class="line">        <span class="attribute">fastcgi_pass</span>  unix:/tmp/php-fpm.sock;</span><br><span class="line">        <span class="attribute">fastcgi_index</span> index.php;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">add_header</span>    X-Cluster <span class="string">"77"</span>;</span><br><span class="line">        <span class="attribute">fastcgi_intercept_errors</span> <span class="literal">on</span>;</span><br><span class="line"></span><br><span class="line">        <span class="attribute">include</span> fastcgi.conf;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">location</span> <span class="regexp">~ .*\.(gif|jpg|jpeg|png|bmp|swf)$</span></span><br><span class="line"><span class="regexp"></span>    &#123;</span><br><span class="line">        <span class="attribute">expires</span> <span class="number">30d</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">location</span> <span class="regexp">~ .*\.(js|css)?$</span></span><br><span class="line"><span class="regexp"></span>    &#123;</span><br><span class="line">        <span class="attribute">expires</span> <span class="number">1h</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">error_page</span> <span class="number">404</span> /<span class="number">404</span>.html;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">access_log</span>  logs/access/www.xxx.com.log proxy;</span><br></pre></td></tr></table></figure></p>
+
+				</div>
+                <p> -- <acronym title="End of File">EOF</acronym> -- </p>
+                <div class="post-info">
+                    <p>本文链接：<a href="http://whoyu.com/post/2016/08/nginx-load-balance/">http://whoyu.com/post/2016/08/nginx-load-balance/</a></p>
+                    <p>发表于<i>2016-08-15 15:56:57</i>，并被添加「
+                            
+                            <a  href="/tags/nginx" data-tag="nginx">nginx</a>
+                        」标签，最后修改于<i>2018-04-03 16:44:24</i></p>
+                </div>
+			</article>
+            
+                <div id="comments">
+	<h2>Comments</h2>
+	<div id="disqus_thread">
+	    评论加载中...<br><br>注：如果长时间无法加载，请针对 disq.us | disquscdn.com | disqus.com 启用代理。
+	</div>
+</div>
+            
+        </div>
+    </div>
+</div>
+
+    <script>
+         var disqus_config = function () {
+             this.page.url = 'http://whoyu.com/post/2016/08/nginx-load-balance/';
+             this.page.identifier = 'post/2016/08/nginx-load-balance/';
+         };
+        (function() {
+
+            var d = document, s = d.createElement('script');
+            var disqus_shortname = 'whoyu';
+            s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+
+            setTimeout(function(){
+                (d.head || d.body).appendChild(s);
+            },100);
+        })();
+    </script>
+
+
+<script src="/static/js/meizi.js"></script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="author" content="gmailzj">
+	
+        <link rel="icon" href="/static/images/favicon.png">
+    
+    
+    
+    	<meta name="keyword" content="nginx">
+    
+    
+    	<meta name="description" content="nginx安装set-misc-nginx-module模块实现A/B测试">
+    
+	<title>nginx 配置模块 实现A/B测试 - whoyu</title>
+	<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+
+
+<nav  id="sidebar" class=" behavior_1">
+    <div class="wrap">
+    	
+    		<div class="profile">
+    			<a href="/"><img src="/static/images/gravatar.jpg" alt="whoyu"></a>
+    			<span>whoyu</span>
+    		</div>
+    	
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  class="" href="/">
+                            
+                                <i class="iconfont icon-home" title="首页"></i>
+                            
+                            <span>首页</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/archive/">
+                            
+                                <i class="iconfont icon-archive" title="归档"></i>
+                            
+                            <span>归档</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/tags/">
+                            
+                                <i class="iconfont icon-tags" title="标签"></i>
+                            
+                            <span>标签</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/about/">
+                            
+                                <i class="iconfont icon-user" title="关于"></i>
+                            
+                            <span>关于</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/links/">
+                            
+                                <i class="iconfont icon-link" title="友链"></i>
+                            
+                            <span>友链</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  target="_blank"  class="" href="https://github.com/gmailzj">
+                            
+                                <i class="iconfont icon-github" title="GitHub"></i>
+                            
+                            <span>GitHub</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  target="_blank"  class="" href="http://weibo.com/1764592400">
+                            
+                                <i class="iconfont icon-weibo" title="微博"></i>
+                            
+                            <span>微博</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  class="" href="/rss.xml">
+                            
+                                <i class="iconfont icon-rss" title="RSS"></i>
+                            
+                            <span>RSS</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    </div>
+</nav>
+
+
+
+<div id="header">
+	<div class="btn-bar"><i></i></div>
+	<h1><a href="/">whoyu</a></h1>
+	<a class="me" href="/about/">
+        <img src="/static/images/gravatar.jpg" alt="whoyu" alt="whoyu">
+    </a>
+</div>
+<div id="sidebar-mask"></div>
+
+
+
+<div id="main">
+    <div class="wrap">
+        <div id="page-post">
+        	<article class="markdown">
+				<h1>
+					
+                        nginx 配置模块 实现A/B测试
+                    
+				</h1>
+				<p class="note-tags">
+					
+                        <a  href="/tags/nginx" data-tag="nginx">
+                            <code class="notebook">nginx</code>
+                        </a>
+                    
+				</p>
+				<div class="content">
+					<p> nginx 安装set-misc-nginx-module模块 实现A/B测试<br><a id="more"></a></p>
+<p>[TOC]</p>
+<h1 id="1-需求："><a href="#1-需求：" class="headerlink" title="1 需求："></a>1 需求：</h1><p>给定一个URL，通过nginx 301跳转到不同的APK下载<br>比如xxx.com/abc.apk 跳转到两个URL:</p>
+<blockquote>
+<ol>
+<li>url.com/abc.one.apk</li>
+<li>url.com/abc.two.apk</li>
+</ol>
+</blockquote>
+<h2 id="1-1-方案1：通过split-clients。"><a href="#1-1-方案1：通过split-clients。" class="headerlink" title="1.1 方案1：通过split_clients。"></a>1.1 方案1：通过split_clients。</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#http段</span></span><br><span class="line"><span class="comment"># 方案2</span></span><br><span class="line">split_clients <span class="string">"<span class="variable">$&#123;remote_addr&#125;</span>HASH"</span> <span class="variable">$variant</span> &#123;</span><br><span class="line">        50%               .one;</span><br><span class="line">        *                 .two;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#server段</span></span><br><span class="line">location = /abc.apk &#123;</span><br><span class="line">     <span class="built_in">return</span> 301 http://url.com/abc<span class="variable">$&#123;variant&#125;</span>.apk;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="1-2-方案2：通过map。"><a href="#1-2-方案2：通过map。" class="headerlink" title="1.2 方案2：通过map。"></a>1.2 方案2：通过map。</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"> <span class="comment">#http段</span></span><br><span class="line"> <span class="comment"># 方案2</span></span><br><span class="line"> map <span class="variable">$loc_rnd</span> <span class="variable">$ab_test_value</span>&#123;</span><br><span class="line">     1  <span class="string">".one"</span>;</span><br><span class="line">     2  <span class="string">".two"</span>;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">#server段</span></span><br><span class="line">location = /abc.apk &#123;</span><br><span class="line">     set_random <span class="variable">$loc_rnd</span> 1 2;</span><br><span class="line">     <span class="built_in">return</span> 301 http://url.com/abc<span class="variable">$&#123;ab_test_value&#125;</span>.apk;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>需要用到<a href="https://github.com/openresty/set-misc-nginx-module" target="_blank" rel="noopener">set-misc-nginx-module</a>模块</p>
+<h3 id="1-2-1-安装-set-misc-nginx-module"><a href="#1-2-1-安装-set-misc-nginx-module" class="headerlink" title="1.2.1 安装 set-misc-nginx-module"></a>1.2.1 安装 set-misc-nginx-module</h3><p>如果nginx之前是通过源码编译安装的：<br>找到源码位置，比如<strong>/usr/local/src</strong><br>或者找不到源码位置，则全新安装升级nginx</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/src</span><br><span class="line"><span class="comment"># 下载nginx</span></span><br><span class="line">wget <span class="string">'http://nginx.org/download/nginx-1.11.2.tar.gz'</span></span><br><span class="line">tar -xzvf nginx-1.11.2.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载 ngx_devel_kit</span></span><br><span class="line">wget <span class="string">'https://github.com/simpl/ngx_devel_kit/archive/v0.3.0.tar.gz'</span></span><br><span class="line">tar -zxvf v0.3.0.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载 set-misc-nginx-module</span></span><br><span class="line">wget <span class="string">'https://github.com/openresty/set-misc-nginx-module/archive/v0.31.tar.gz'</span></span><br><span class="line">tar -zxvf v0.31.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开始升级nginx</span></span><br><span class="line"><span class="comment"># 查看nginx编译安装时的命令，安装了哪些模块</span></span><br><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/nginx/sbin/</span><br><span class="line">./nginx -V </span><br><span class="line"></span><br><span class="line"><span class="comment"># config输出如下：</span></span><br><span class="line"> --prefix=/usr/<span class="built_in">local</span>/nginx --user=www --group=www \</span><br><span class="line"> --with-http_stub_status_module --with-http_ssl_module \</span><br><span class="line"> --with-http_gzip_static_module \</span><br><span class="line"> --with-ipv6 --with-http_sub_module --with-http_geoip_module</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 这里需要用到上面的config参数 </span></span><br><span class="line"> <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/src/nginx-1.11.2</span><br><span class="line"> </span><br><span class="line"> <span class="comment"># 重新configure</span></span><br><span class="line"> ./configure --prefix=/usr/<span class="built_in">local</span>/nginx --user=www --group=www \</span><br><span class="line"> --with-http_stub_status_module --with-http_ssl_module \</span><br><span class="line"> --with-http_gzip_static_module \</span><br><span class="line"> --with-ipv6 --with-http_sub_module --with-http_geoip_module</span><br><span class="line">  --add-module=../ngx_devel_kit-0.3.0/ \</span><br><span class="line">  --add-module=../<span class="built_in">set</span>-misc-nginx-module-0.31</span><br><span class="line"></span><br><span class="line"><span class="comment"># make</span></span><br><span class="line">make </span><br><span class="line"></span><br><span class="line"><span class="comment">#执行完后，这里不用在 make install 了</span></span><br><span class="line"><span class="comment">#备份原先的nginx执行文件</span></span><br><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/nginx/sbin</span><br><span class="line">cp nginx nginx_bak</span><br><span class="line"><span class="comment">#复制编译后objs目录下的nginx文件到nginx的安装目录sbin/下</span></span><br><span class="line"><span class="built_in">cd</span> -</span><br><span class="line"><span class="comment"># 如果复制不了，加-p参数</span></span><br><span class="line">cp -p objs/nginx /usr/<span class="built_in">local</span>/nginx/sbin/ </span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试一下新的nginx 是否正常</span></span><br><span class="line">/usr/<span class="built_in">local</span>/nginx/sbin/nginx -t</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开始平滑升级</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 找到nginx.pid 文件</span></span><br><span class="line">ps aux |grep nginx </span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">cat /usr/<span class="built_in">local</span>/nginx/conf/nginx.conf | grep pid</span><br><span class="line"><span class="comment"># 输出如下</span></span><br><span class="line"><span class="comment"># pid        /usr/local/nginx/logs/nginx.pid;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">kill</span> -USR2 `cat /usr/<span class="built_in">local</span>/nginx/logs/nginx.pid`</span><br><span class="line"><span class="built_in">kill</span>  -WINCH `cat /usr/<span class="built_in">local</span>/nginx/logs/nginx.pid.oldbin`</span><br><span class="line"><span class="built_in">kill</span> -QUIT `cat /usr/<span class="built_in">local</span>/nginx/logs/nginx.pid.oldbin`</span><br></pre></td></tr></table></figure>
+
+				</div>
+                <p> -- <acronym title="End of File">EOF</acronym> -- </p>
+                <div class="post-info">
+                    <p>本文链接：<a href="http://whoyu.com/post/2017/03/nginx-ab-test/">http://whoyu.com/post/2017/03/nginx-ab-test/</a></p>
+                    <p>发表于<i>2017-03-02 19:56:57</i>，并被添加「
+                            
+                            <a  href="/tags/nginx" data-tag="nginx">nginx</a>
+                        」标签，最后修改于<i>2017-03-02 20:57:39</i></p>
+                </div>
+			</article>
+            
+                <div id="comments">
+	<h2>Comments</h2>
+	<div id="disqus_thread">
+	    评论加载中...<br><br>注：如果长时间无法加载，请针对 disq.us | disquscdn.com | disqus.com 启用代理。
+	</div>
+</div>
+            
+        </div>
+    </div>
+</div>
+
+    <script>
+         var disqus_config = function () {
+             this.page.url = 'http://whoyu.com/post/2017/03/nginx-ab-test/';
+             this.page.identifier = 'post/2017/03/nginx-ab-test/';
+         };
+        (function() {
+
+            var d = document, s = d.createElement('script');
+            var disqus_shortname = 'whoyu';
+            s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+
+            setTimeout(function(){
+                (d.head || d.body).appendChild(s);
+            },100);
+        })();
+    </script>
+
+
+<script src="/static/js/meizi.js"></script>
+</body>
+</html>
