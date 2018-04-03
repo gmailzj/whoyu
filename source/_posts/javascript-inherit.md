@@ -3,7 +3,10 @@ title: javascript-inherit
 date: 2016-04-27 15:56:57
 tags: javascript
 ---
-**javascript 继承**
+javascript中继承实现
+<!-- more -->
+
+javascript 继承**
 1 在原型里面拓展方法和属性，一般都是方法，很少属性?
 因为prototype里面的属性(也就是数据)是每个实例共享的，有写操作的时候每个实例之间会冲突、污染数据
 写操作分为重新赋值(=)和增减数据(push)
@@ -106,4 +109,4 @@ var obj =  类名.create();//得到实例
   };
 })();
 
- ```
+```
