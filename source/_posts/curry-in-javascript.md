@@ -1,17 +1,21 @@
 layout: post
-title: javascript中的通用curry函数 实现原理
+title: javascript中的通用currying函数 实现原理
 date: 2017-08-02 20:30:57
 tags: [javascript,fp,curry]
 ---
 
-javascript中的curry函数 原理分析
+javascript中的currying函数 原理分析
 <!-- more -->
 
-## curry(柯里化)
+## currying(柯里化)
 
 ### 基本
 
+Currying是函数式编程的一个特性，将多个参数的处理转化成单个参数的处理，类似链式调用。
+
 函数的柯里化概念很简单：只传递给函数一部分参数来调用它，让它返回一个函数去处理剩下的参数。
+
+柯里化作用：1. 参数复用；2. 提前返回；3. 延迟计算/运行。
 
 你可以一次性地调用 curry 函数，也可以每次只传一个参数分多次调用。
 
@@ -36,7 +40,7 @@ addTen(2);
 
 
 
-### 通用用法
+### 通用用法1
 
 ```js
 function curry(fn) {
@@ -109,5 +113,34 @@ var increment = curried(1);
 var addTen = curried(10);
 increment(2)
 addTen(2)
+```
+
+### 通用用法2
+
+```js
+// 方式2
+var curryN = (fn, length) = > {
+	//对原始函数的包装，合并多次调用的柯里化的函数的参数，作为原始函数fn的参数，调用fn
+	var _warpFunc = (fn, args) = > (...arguments) = > fn.apply(null, args.concat(Array.prototype.slice.call(arguments)));
+
+	return function() {
+		var args = Array.prototype.slice.call(arguments);
+		if (args.length < length) {
+			return curryN(_warpFunc(fn, args), length - args.length)
+		}
+		return fn.apply(null, args);
+	}
+}
+var curry = (fn, length = fn.length) = > curryN(fn, length);
+
+
+// 
+var curried = curry(abc)
+console.log(curried(1)(2)(3))
+// => [1, 2, 3]
+console.log(curried(1, 2)(3))
+// => [1, 2, 3]
+console.log(curried(1)(2, 3))
+// => [1, 2, 3]
 ```
 
