@@ -42,6 +42,21 @@ addTen(2);
 
 ### 通用用法1
 
+然后上面基本用法那里的例子可以这样来写了
+
+```js
+var add = function(x,y) {
+	return x + y;
+};
+var curried = curry(add);
+var increment = curried(1);
+var addTen = curried(10);
+console.log(increment(2))
+console.log(addTen(2))
+```
+
+curry函数在下面实现
+
 ```js
 function curry(fn) {
             // 获取需要curry的函数fn的参数个数，闭包存储起来
@@ -98,21 +113,6 @@ function curry(fn) {
 
         console.log(curried(1)(2, 3))
             // => [1, 2, 3]
-```
-
-然后上面基本用法那里的例子可以这样来写了
-
-```js
-var add = function(x) {
-  return function(y) {
-    return x + y;
-  };
-};
-var curried = curry(add);
-var increment = curried(1);
-var addTen = curried(10);
-increment(2)
-addTen(2)
 ```
 
 ### 通用用法2
