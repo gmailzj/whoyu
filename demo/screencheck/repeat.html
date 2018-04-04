@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <title>连续检查</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+
+    <script src="jquery.min.js"></script>
+
+
+    <style>
+        
+        .output {
+            position: fixed;
+            right: 10px;
+            margin-bottom: 40px;
+            border-radius: 4px;
+            height: 350px;
+            width: 200px;
+            padding: 9.5px;
+            background-color: rgb(92, 74, 44);
+            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+            font-size: 90%;
+            color: #fff;
+            overflow: auto;
+        }
+
+        #output{
+        	top:22px;
+        }
+
+        #outputActions{
+        	top:350px;
+        }
+
+        #picker {
+            position: fixed;
+            top: 1px;
+            right: 10px;
+            margin-bottom: 40px;
+            border-radius: 4px;
+            height: 10px;
+            width: 200px;
+            padding: 9.5px;
+            background-color: rgb(92, 74, 44);
+            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+            font-size: 90%;
+            color: #fff;
+        }
+
+
+        
+        #compare {
+            position: fixed;
+            top: 400px;
+            right: 10px;
+            height: 800px;
+            max-width: 680px;
+            width:680px;
+            font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+            font-size: 90%;
+            overflow: scroll;
+        }
+
+        #circle {
+        	position: fixed;
+            top: 10px;
+            right: 280px;
+		    width: 100px;
+		    height: 100px;
+		    background: #fff;
+		    -moz-border-radius: 50px;
+		    -webkit-border-radius: 50px;
+		    border-radius: 50px;
+		    opacity: 0.9;
+    		padding-top: 35px;
+    		text-align: center;
+		}
+        
+        td.eq {
+            background-color: green !important;
+        }
+        
+        td.ne {
+            background-color: red !important;
+        }
+        
+        .btn {
+            border-radius: 4px !important;
+            margin-top: 2px;
+        }
+        h5{
+        	margin:2px;
+        }
+    </style>
+</head>
+
+<body class="container">
+
+    <fieldset>
+        <legend class="" style="text-align:center"><a href="v2.html">连续检查坐标:</a><span id="countNum">0</span></legend>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="btn-toolbar">
+                   
+                    <div class="btn-group" data-original-title="" title="" style="width:100%;">
+                    	 
+                        <input type="text" placeholder="图片url" class="form-control" name="imgurl" id="txt-img-url" value="img.png">
+
+                        <button class="btn btn-primary" type="button" style="margin-right:4px;" id="btn-load-img">加载接口图片</button>
+
+                        <img src="40x40.svg" id="loading" style="display:none;">
+                    </div>
+
+                </div>
+            </div>
+            <div class="progress progress-striped active" style="display:none; width:93.5%;margin: 4px auto;">
+                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                    <span>100%</span>
+                </div>
+            </div>
+
+        </div>
+        <div id="count"></div>
+        <div style="margin-top:10px; float:left; padding-bottom:100px">
+
+
+            <img id="img1" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==">
+            <canvas id="canvas1" width=1 height=1></canvas>
+
+        </div>
+        <output style="margin-top:10px;margin-left:5px" class="hide"></output>
+
+        <div id="picker"></div>
+        <textarea id="output" class="output" placeholder="pixel结果"> </textarea>
+
+        <textarea id="outputActions" style="display:none;" class="output" placeholder="action结果"></textarea>
+
+        <div id="circle" style="display:none;">
+        </div>
+        <div id="compare">
+            <table class="table table-striped table-bordered table-hover dataTables-example">
+                <thead id="wrap-compare-header">
+                  
+                </thead>
+                <tbody id="wrap-compare">
+
+                </tbody>
+            </table>
+        </div>
+    </fieldset>
+
+
+    <div class="footer" style="display:none;">
+        <p> Powered by 尝鲜</p>
+        <p><span>深圳市合一互联技术有限责任公司版权所有</span></p>
+    </div>
+    <script>
+        var CX = CX || {};
+        CX.Tool = {
+            getParameter: function(name) {
+                var _search = document.location.search;
+                var _pattern = new RegExp("[?&]" + name + "\=([^&]+)", "g");
+                var _matcher = _pattern.exec(_search);
+                var _items = null;
+                if (null != _matcher) {
+                    _items = decodeURIComponent(_matcher[1]);
+                } else {
+                    _search = document.location.hash;
+                    _pattern = new RegExp("#" + name, "g");
+                    _matcher = _pattern.exec(_search);
+                    if (null != _matcher) {
+                        return true;
+                    }
+                }
+                return _items;
+            },
+            //获取get参数，如果提供了参数0，表示取这个值，否则全部
+            getRequest: function() {
+                var b, c, d = window.location.search,
+                    e = 0,
+                    f = new Object;
+                if ("" == d)
+                    return 0;
+                if (-1 != d.indexOf("?"))
+                    for (b = d.substr(1).split("&"); e < b.length; e++)
+                        c = b[e].split("="),
+                        f[c[0]] = c[1];
+                return arguments[0] ? f[arguments[0]] : f
+            },
+            //赋值 localStorage item
+            setLocal: function(a, b) {
+                var c = jQuery;
+                (c.isArray(b) || c.isPlainObject(b)) && (b = JSON.stringify(b));
+                try {
+                    return window.localStorage.setItem(a, b),
+                        1
+                } catch (d) {
+                    return 0
+                }
+            },
+            //删除localStorage item
+            removeLocal: function(a) {
+                try {
+                    return window.localStorage.removeItem(a),
+                        1
+                } catch (b) {
+                    return 0
+                }
+            },
+            //清空localStorage
+            clearLocal: function() {
+                try {
+                    return window.localStorage.clear(),
+                        1
+                } catch (a) {
+                    return 0
+                }
+            },
+            //获取localStorage item
+            getLocal: function(a, b) {
+                var d = window.localStorage.getItem(a);
+                return b ? JSON.parse(d) : d
+            },
+            //数组或者key value是否为空
+            isEmpty: function(a) {
+                for (var b in a)
+                    return !1;
+                return !0
+            },
+            random: function(a) {
+                return parseInt(Math.random() * a)
+            },
+            //打乱 数组随机出现一个顺序
+            sortRandom: function(a) {
+                return a.sort(function() {
+                    return Math.random() > .5 ? -1 : 1
+                })
+            },
+            encode: function(a) {
+                return encodeURIComponent(a)
+            },
+            decode: function(a) {
+                return decodeURIComponent(a)
+            },
+            //参数格式化，第一个为字符串，后面为变量 对应顺序
+            strFormat: function(a) {
+                if (0 === arguments.length)
+                    return null;
+                var b = Array.prototype.slice.call(arguments, 1);
+                return a.replace(/\{(\d+)\}/g, function(a, c) {
+                    return b[c]
+                })
+            },
+            
+        };
+    </script>
+
+
+
+
+    <script type="text/javascript">
+
+        var c = document.getElementById("canvas1");
+        var ctx = c.getContext("2d");
+
+        var localStorageKey = {
+        	"imgUrl": 'screenCheckImgUrl',
+        	"pixels": 'screenCheckPixels',
+        	"actions": 'screenCheckActions',
+        	"isPortrait": "screenCheckisPortrait"
+        }
+
+
+        var img = document.getElementById("img1");
+        var n = 0;
+        var count = 0;
+
+        var lastWidth, lastHeight;
+
+        var userClickData = [];
+
+        // 是否横竖屏
+        var isPortrait = 0;
+
+
+
+
+        img.crossOrigin = 'anonymous';
+
+        img.onerror = function() {
+            $("#info").text("加载图片出错")
+        }
+
+
+        img.onload = function() {
+
+            console.log("load img:" + n)
+                //if (!n++) return false;
+
+            n++;
+            $("#loading").hide();
+            $("#countNum").text(n);
+
+            c.width = img.width;
+            c.height = img.height;
+            $("#img1").hide();
+            ctx.drawImage(img, 0, 0);
+
+            lastWidth = img.width;
+            lastHeight = img.height;
+
+            $("#info").text("加载成功:" + (new Date).getTime())
+
+            if (n >= 5) {
+                $("#btn-load-img").attr("disabled", true);
+            }
+
+
+            setTable();
+
+        }
+
+        var dataList = [];
+
+
+        function formatCompare(){
+            // 展示数据
+            
+
+            var rowstr, tStr ;
+
+            var columnMax ;
+            // 展示表头
+            columnMax =  dataList[0].rgb.length;
+
+            var headHtml = '<tr><th style="width: 30px;">id</th><th style="width: 80px;">坐标</th>';
+            for(var i=0; i<columnMax; i++){
+
+                headHtml += '<th style="width: 100px;">像素'+i+'</th>'
+                    
+            }
+            headHtml +="</tr>";
+            $("#wrap-compare-header").html(headHtml)
+            
+
+            // 展示表数据
+
+            console.log(dataList,columnMax);
+
+            dataList.forEach(function(v, k) {
+                // 第一步是坐标，然后是像素
+                var isEqual = true;
+                var classStr = '';
+                
+                var tmpPixels = v["rgb"];
+
+                // 多余1个对比
+                if(columnMax>1){
+                    for(var i=0; i<columnMax; i++){
+                        if(i<columnMax-1){
+
+                        }
+                        if(i<columnMax-1 && (Object.values(tmpPixels[i]).join("-") != Object.values(tmpPixels[i+1]).join("-"))){
+                            isEqual = false;
+                        }
+
+                    
+                    }
+                    classStr = isEqual ? "eq" : "ne";
+                }
+
+                rowstr = '<tr ><td class="' + classStr + '">'+k+'</td><td>'+v["x"]+','+v["y"]+'</td>'
+                tmpPixels.forEach(function(v1, k1){
+                    rowstr += '<td>'+v1["r"]+","+v1["g"]+","+v1["b"]+"</td>";
+                })
+                rowstr +="</tr>";
+                tStr += rowstr;
+                
+            });
+
+            // rowstr = "<tr class='" + classStr + "'>" +
+            //     "<td>" + k + "</td>" +
+            //     "<td>" + x + "-" + y + "</td>" +
+            //     "<td>" + r + "," + g + "," + b + "</td>" +
+            //     "</tr>";
+            
+            $("#wrap-compare").html(tStr)
+        }
+
+        function firstload(){
+            console.log("firstload");
+
+            var userClickData = CX.Tool.getLocal(localStorageKey.pixels, 1) || [];
+            if (!userClickData.length) return;
+
+            var tStr = '';
+            
+            userClickData.forEach(function(v, k) {
+                var rowStr = '';
+                var x = v[0],
+                    y = v[1];
+                dataList[k] = {"x":v[0],"y":v[1], rgb:[{"r":v[2], "g":v[3], "b":v[4]}] }
+            });
+
+            // console.log(userClickData);
+            console.log(dataList);
+            formatCompare();
+        }
+
+        function setTable() {
+            var userClickData = CX.Tool.getLocal(localStorageKey.pixels, 1) || [];
+            if (!userClickData.length) return;
+
+            var tStr = '';
+
+            // 获取数据
+            userClickData.forEach(function(v, k) {
+                var rowStr = ''
+                var x = v[0],
+                    y = v[1];
+                 
+                console.log(k);
+                // 新图像
+                var imagedates = ctx.getImageData(x, y, 1, 1);
+                var pixel = imagedates.data;
+                var r = pixel[0],
+                    g = pixel[1],
+                    b = pixel[2];
+
+                dataList[k]["rgb"].push({"r":r, "g":g, "b":b}) ; 
+                
+            })
+
+            console.log(dataList);
+            formatCompare();
+
+            
+
+        }
+
+       
+
+        // 加载图片
+        $("#btn-load-img").on("click", function() {
+
+            $("#loading").show();
+
+            var url = $("#txt-img-url").val();
+            if (url == "") {
+                $("#info").text("url 错误");
+                $("#loading").hide();
+                return;
+            }
+
+            CX.Tool.setLocal(localStorageKey.imgUrl, url);
+
+            // 增加随机数
+            var t = (new Date()).getTime();
+            if (url.indexOf("?") !== -1) {
+                url += "&t=" + t;
+            } else {
+                url += "?t=" + t;
+            }
+            img.src = url;
+
+        })
+
+       
+
+        // 清空坐标
+        $("#btn-clear").on("click", function() {
+            CX.Tool.removeLocal(localStorageKey.pixels);
+
+            window.location.reload();
+
+        })
+
+       
+
+        function setOutputPixel(e, pixel){
+        	var line;
+            var curVal = $("#output").val()
+
+            var xy = "- [" + e.offsetX + "," + e.offsetY;
+            if (curVal != " ") {
+                line = curVal + xy;
+            } else {
+                line = xy;
+            }
+
+
+
+            var rgb = "rgb(" + pixel[0] + "," + pixel[1] + "," + pixel[2] + ")";
+
+            line += "," + pixel[0] + "," + pixel[1] + "," + pixel[2] + "]";
+
+            line += "\n";
+
+            userClickData.push([e.offsetX, e.offsetY, pixel[0], pixel[1], pixel[2]]);
+            CX.Tool.setLocal(localStorageKey.pixels, userClickData);
+
+            $("#output").val(line)
+            $("#picker").css("background-color", rgb);
+
+            // 更新表格
+            if (n >= 2) {
+
+                comparePixel();
+            }
+
+        }
+
+        
+        $(function() {
+            // 加载用户自定义坐标信息
+            var url = CX.Tool.getLocal(localStorageKey.imgUrl);
+            $("#txt-img-url").val(url);
+            userClickData = CX.Tool.getLocal(localStorageKey.pixels, 1) || [];
+            formateTextArea(userClickData)
+            firstload();
+
+        })
+
+        function formateTextArea(data) {
+
+            var str = ''
+            data.forEach(function(v, k) {
+
+                var line = '';
+
+
+                line = "- [" + v[0] + "," + v[1];
+
+
+                var rgb = "rgb(" + v[2] + "," + v[3] + "," + v[4] + ")";
+
+                line += "," + v[2] + "," + v[3] + "," + v[4] + "]";
+
+                line += "\n";
+                str += line;
+                // console.log(str)
+            })
+
+            $("#output").val(str)
+        }
+
+
+        
+    </script>
+
+   
+</body>
+
+</html>

@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no, email=no" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<title>cx工具</title>
+<link rel="stylesheet" href="bootstrap.min.css">
+
+<script src="jquery.min.js"></script>
+
+
+<style>output,#output {
+	position:fixed;
+	right:100px;
+    margin-bottom: 40px;
+    border-radius: 4px;
+    height: 700px;
+    width:250px;
+    padding: 9.5px;
+    background-color: rgb(92,74,44);
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 90%;
+    color: #fff;
+    overflow: auto;
+}
+#picker{
+	position:fixed;
+	top:120px;
+	right:100px;
+    margin-bottom: 40px;
+    border-radius: 4px;
+    height: 10px;
+    width:250px;
+    padding: 9.5px;
+    background-color: rgb(92,74,44);
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 90%;
+    color: #fff;
+}
+</style>
+</head>
+<body class="container">
+
+<a href="v2.html" style="color:red;font-size:20px;">最新版进入地址 </a>
+<fieldset>
+    <legend class="" style="text-align:center">获取坐标和像素</legend>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="btn-toolbar">
+                <p class="bg-danger" class="form-control"  id="info">http://192.168.0.83:8080/admin/screencap?deviceId=1</p>
+               	<hr>
+               	请将图片url填写到下面的文本框 当前为默认图
+                <div class="btn-group" data-original-title="" title="" style="width:80%">
+            	<input type="text" placeholder="图片url" class="form-control" name="imgurl" id="txt-img-url" value="img.png">
+                <button class="btn btn-default" type="button" data-measure="download" id="btn-load-img">加载图片</button>
+                </div>
+            </div>
+        </div>
+        <div class="progress progress-striped active" style="display:none; width:93.5%;margin: 4px auto;">
+            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                <span>100%</span>
+            </div>
+        </div>
+
+    </div>
+    <div style="margin-top:10px; float:left; padding-bottom:100px" > 
+
+
+    	<img id="img1" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" >
+    	<canvas id="canvas1"></canvas>
+    	
+    </div>
+    <output style="margin-top:10px;margin-left:5px" class="hide"></output>
+
+    <div id="picker"></div>
+    <textarea id="output" placeholder="结果"> </textarea>
+    
+</fieldset>
+
+
+
+<div class="footer" style="display:none;">
+    <p> Powered by 尝鲜</p>
+    <p><span>深圳市合一互联技术有限责任公司版权所有</span></p>
+</div>
+<script type="text/javascript">
+// 720 1280 
+// 18   32
+// 9    16
+// 198   352
+// 640  1136
+var c =document.getElementById("canvas1");
+var ctx=c.getContext("2d");
+var img = document.getElementById("img1");
+var n=0;
+
+img.crossOrigin = 'anonymous';
+
+img.onerror = function(){
+	$("#info").text("加载图片出错")
+}
+
+
+img.onload = function(){
+	c.width = img.width;
+	c.height = img.height;
+	$("#img1").hide();
+	ctx.drawImage(img,0,0);
+	
+}
+
+$(c).on("click", function(e){
+		console.log(e, e.clientX, e.clientY)
+		console.log(e.offsetX, e.offsetY)
+		var line ;
+		var curVal = $("#output").val()
+
+		var xy = "- [" + e.offsetX+","+e.offsetY;
+		if(curVal!=" "){
+			line = curVal+ xy;
+		} else {
+			line  = xy;
+		}
+
+		var ox = e.offsetX; oy = e.offsetY;
+        var imagedates=ctx.getImageData(ox,oy,1,1);  
+
+        var pixel=imagedates.data;  
+
+        var rgb = "rgb("+pixel[0]+","+pixel[1]+","+pixel[2]+")";
+
+        line += "," + pixel[0]+","+pixel[1]+","+pixel[2] +"]";
+
+        line +="\n";
+
+		$("#output").val( line )
+		$("#picker").css("background-color",rgb);
+		return false;
+	})
+
+$("#btn-load-img").on("click", function(){
+	n = 1;
+	var url = $("#txt-img-url").val();
+	if(url == ""){
+		$("#info").text("url 错误");
+		return ;
+	}
+
+	// 增加随机数
+	var t = (new Date()).getTime();
+	if(url.indexOf("?")!==-1){
+		url+="&t="+t;
+	} else {
+		url+="?t="+t;
+	}
+	img.src=url;
+
+})
+//img.src="img.png"
+//img.src="http://192.168.0.83:8080/admin/screencap?deviceId=1";
+
+$(function(){
+
+})
+</script>
+<script>
+
+
+
+
+</script>
+</body>
+</html>
