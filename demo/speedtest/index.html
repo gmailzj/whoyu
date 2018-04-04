@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>测速</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="./main.css">
+</head>
+
+<body>
+    <div class="container">
+        <form>
+            <fieldset>
+                <legend>测速功能</legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="btn-toolbar">
+                            <div class="btn-group">
+                                <button class="btn btn-default" type="button" data-measure="download">
+                                    <span class="glyphicon glyphicon-download"></span> 开始测速
+                                </button>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-default" type="button" data-abort disabled>
+                                    <span class="glyphicon glyphicon-remove-circle"></span> 取消测速
+                                </button>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-default" type="button" data-clear>
+                                    <span class="glyphicon glyphicon-remove-circle"></span> 清除调试信息
+                                </button>
+                            </div>
+                            <div class="btn-group hide">
+                                <button class="btn btn-default" type="button" data-ajax>
+                                    <span class="glyphicon glyphicon-remove-circle"></span> Ajax
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress progress-striped active" style="width:93.5%;margin: 4px auto;">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="">
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <output></output>
+        </form>
+    </div>
+    <script src="jquery.min.js"></script>
+    <script src="tooltip.min.js"></script>
+    <script src="./network.js"></script>
+    <script src="./main.js"></script>
+</body>
+
+</html>
