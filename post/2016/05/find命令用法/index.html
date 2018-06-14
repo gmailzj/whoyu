@@ -187,6 +187,8 @@
 </ul>
 <p><strong>$ find . -name ‘my*‘ -type d</strong></p>
 <p>搜索当前目录中，所有以my开头的文件夹名字</p>
+<p><strong>find ./ -name “*.txt”  -exec grep “n” {} \;</strong></p>
+<p>搜索当前目录中，所有包含n这个字符串的txt文件</p>
 <h3 id="查找时间"><a href="#查找时间" class="headerlink" title="查找时间"></a>查找时间</h3><p>###按天</p>
 <p><em>•</em> mtime <em>—</em> 文件内容上次修改时间<br><em>•</em> atime — 文件被读取或访问的时间<br><em>•</em> ctime — 文件状态变化时间</p>
 <p>这些时间选项都需要与一个值 <em>n</em> 结合使用，指定为 <em>-n、n</em> 或 <em>+n</em>。时间是以24小时为单位的</p>
@@ -232,7 +234,7 @@
                     <p>发表于<i>2016-05-02 15:56:57</i>，并被添加「
                             
                             <a  href="/tags/linux, find" data-tag="linux, find">linux, find</a>
-                        」标签，最后修改于<i>2018-04-04 11:54:53</i></p>
+                        」标签，最后修改于<i>2018-04-10 11:11:18</i></p>
                 </div>
 			</article>
             

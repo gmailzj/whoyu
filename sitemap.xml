@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://whoyu.com/post/2016/05/find%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95/</loc>
+    
+    <lastmod>2018-04-10T03:11:18.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://whoyu.com/post/2017/07/es6/</loc>
+    
+    <lastmod>2018-04-09T08:26:51.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://whoyu.com/post/2017/08/curry-in-javascript/</loc>
     
     <lastmod>2018-04-04T06:01:03.000Z</lastmod>
@@ -9,23 +23,9 @@
   </url>
   
   <url>
-    <loc>http://whoyu.com/post/2016/05/find%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95/</loc>
-    
-    <lastmod>2018-04-04T03:54:53.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://whoyu.com/post/2017/06/eventproxy/</loc>
     
     <lastmod>2018-04-03T09:59:48.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://whoyu.com/post/2017/07/es6/</loc>
-    
-    <lastmod>2018-04-03T09:59:38.000Z</lastmod>
     
   </url>
   
@@ -72,14 +72,14 @@
   </url>
   
   <url>
-    <loc>http://whoyu.com/about/index.html</loc>
+    <loc>http://whoyu.com/archive/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://whoyu.com/archive/index.html</loc>
+    <loc>http://whoyu.com/about/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
