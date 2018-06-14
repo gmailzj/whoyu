@@ -8,8 +8,24 @@
     <atom:link href="/rss.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Wed, 04 Apr 2018 06:01:03 GMT</pubDate>
+    <pubDate>Thu, 14 Jun 2018 03:10:58 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>git init 项目初始化</title>
+      <link>http://whoyu.com/post/2018/06/git-init/</link>
+      <guid>http://whoyu.com/post/2018/06/git-init/</guid>
+      <pubDate>Thu, 14 Jun 2018 01:56:57 GMT</pubDate>
+      <description>
+      
+        &lt;p&gt;列举出常用的仓库初始化的操作步骤以及涉及到的Git命令&lt;br&gt;
+      
+      </description>
+      
+      <content:encoded><![CDATA[<p>列举出常用的仓库初始化的操作步骤以及涉及到的Git命令<br><a id="more"></a></p><h5 id="Git-global-setup-配置命令别名alias"><a href="#Git-global-setup-配置命令别名alias" class="headerlink" title="Git global setup(配置命令别名alias)"></a>Git global setup(<em>配置命令别名alias</em>)</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 日志显示更好看</span></span><br><span class="line">git config --global alias.lg <span class="string">"log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit"</span></span><br><span class="line">git config --global alias.st status</span><br><span class="line">git config --global alias.ci commit</span><br><span class="line">git config --global alias.cm commit</span><br><span class="line">git config --global alias.co checkout</span><br><span class="line">git config --global alias.br branch</span><br></pre></td></tr></table></figure><p><strong>Git global setup (<em>用户级别配置</em>)</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git config --global user.name <span class="string">"lake"</span></span><br><span class="line"></span><br><span class="line">git config --global user.email <span class="string">"lake@qq.com"</span></span><br></pre></td></tr></table></figure><p><strong>Create a new repository</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git@gitlab.com:lake/wechat.git</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> wechat</span><br><span class="line"></span><br><span class="line">touch README.md</span><br><span class="line"></span><br><span class="line">git add README.md</span><br><span class="line"></span><br><span class="line">git commit -m <span class="string">"add README"</span></span><br><span class="line"></span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure><p><strong>Existing folder (<em>本地文件夹添加到新项目</em>)</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> existing_folder</span><br><span class="line"></span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line">git remote add origin git@gitlab.com:lake/wechat.git</span><br><span class="line"></span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line">git commit -m <span class="string">"Initial commit"</span></span><br><span class="line"></span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure><p><strong>Existing Git repository (<em>本地已经存在git仓库</em>)</strong></p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> existing_repo</span><br><span class="line"></span><br><span class="line">git remote rename origin old-origin</span><br><span class="line"></span><br><span class="line">git remote add origin git@gitlab.com:lake/wechat.git</span><br><span class="line"></span><br><span class="line">git push -u origin --all</span><br><span class="line"></span><br><span class="line">git push -u origin --tags</span><br></pre></td></tr></table></figure>]]></content:encoded>
+      
+      <comments>http://whoyu.com/post/2018/06/git-init/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>javascript中的通用currying函数 实现原理</title>
