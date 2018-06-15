@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://whoyu.com/post/2018/06/git-commit/</loc>
+    
+    <lastmod>2018-06-15T02:54:12.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://whoyu.com/post/2018/06/git-init/</loc>
     
     <lastmod>2018-06-14T03:10:58.000Z</lastmod>
@@ -51,14 +58,14 @@
   </url>
   
   <url>
-    <loc>http://whoyu.com/rss/index.html</loc>
+    <loc>http://whoyu.com/tags/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://whoyu.com/tags/index.html</loc>
+    <loc>http://whoyu.com/links/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
@@ -100,7 +107,7 @@
   </url>
   
   <url>
-    <loc>http://whoyu.com/links/index.html</loc>
+    <loc>http://whoyu.com/rss/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     

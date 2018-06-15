@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="author" content="gmailzj">
+	
+        <link rel="icon" href="/static/images/favicon.png">
+    
+    
+    
+    	<meta name="keyword" content="git">
+    
+    
+    	<meta name="description" content="列举出常用的提交代码的操作步骤以及涉及到的Git命令">
+    
+	<title>git commit 提交代码 - whoyu</title>
+	<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+
+
+<nav  id="sidebar" class=" behavior_1">
+    <div class="wrap">
+    	
+    		<div class="profile">
+    			<a href="/"><img src="/static/images/gravatar.jpg" alt="whoyu"></a>
+    			<span>whoyu</span>
+    		</div>
+    	
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  class="" href="/">
+                            
+                                <i class="iconfont icon-home" title="首页"></i>
+                            
+                            <span>首页</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/archive/">
+                            
+                                <i class="iconfont icon-archive" title="归档"></i>
+                            
+                            <span>归档</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/tags/">
+                            
+                                <i class="iconfont icon-tags" title="标签"></i>
+                            
+                            <span>标签</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/about/">
+                            
+                                <i class="iconfont icon-user" title="关于"></i>
+                            
+                            <span>关于</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  class="" href="/links/">
+                            
+                                <i class="iconfont icon-link" title="友链"></i>
+                            
+                            <span>友链</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  target="_blank"  class="" href="https://github.com/gmailzj">
+                            
+                                <i class="iconfont icon-github" title="GitHub"></i>
+                            
+                            <span>GitHub</span>
+                        </a>
+                    </li>
+    			
+    				<li>
+                        <a  target="_blank"  class="" href="http://weibo.com/1764592400">
+                            
+                                <i class="iconfont icon-weibo" title="微博"></i>
+                            
+                            <span>微博</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    		<ul class="buttons">
+    			
+    				<li>
+                        <a  class="" href="/rss.xml">
+                            
+                                <i class="iconfont icon-rss" title="RSS"></i>
+                            
+                            <span>RSS</span>
+                        </a>
+                    </li>
+    			
+    		</ul>
+    	
+    </div>
+</nav>
+
+
+
+<div id="header">
+	<div class="btn-bar"><i></i></div>
+	<h1><a href="/">whoyu</a></h1>
+	<a class="me" href="/about/">
+        <img src="/static/images/gravatar.jpg" alt="whoyu" alt="whoyu">
+    </a>
+</div>
+<div id="sidebar-mask"></div>
+
+
+
+<div id="main">
+    <div class="wrap">
+        <div id="page-post">
+        	<article class="markdown">
+				<h1>
+					
+                        git commit 提交代码
+                    
+				</h1>
+				<p class="note-tags">
+					
+                        <a  href="/tags/git" data-tag="git">
+                            <code class="notebook">git</code>
+                        </a>
+                    
+				</p>
+				<div class="content">
+					<p>列举出常用的提交代码的操作步骤以及涉及到的Git命令<br><a id="more"></a></p>
+<p><strong>文件的三种状态</strong></p>
+<p>对于任何一个文件，在 Git 内都只有三种状态：</p>
+<p>1、已修改（modified）    –&gt; Git 的工作目录</p>
+<p>2、已暂存（staged）        –&gt;暂存区域</p>
+<p>3、已提交（committed） –&gt;本地仓库</p>
+<p>已修改表示修改了某个文件，但还没有提交保存；</p>
+<p>已暂存表示把已修改的文件放在下次提交时要保存的清单中。</p>
+<p>已提交表示该文件已经被安全地保存在本地数据库中了；</p>
+<p>由此我们看到 Git 管理项目时，文件流转的三个工作区域：Git 的工作目录，暂存区域，以及本地仓库。</p>
+<p><img src="/images/git-states.svg" alt=""></p>
+<h3 id="提交代码基本流程"><a href="#提交代码基本流程" class="headerlink" title="提交代码基本流程"></a>提交代码基本流程</h3><p><code>git add</code> 和 <code>git commit</code> 这两个命令组成了最基本的 Git 工作流</p>
+<p>首先，你要在工作目录中编辑你的文件。当你准备备份项目的当前状态时，你通过 <code>git add</code> 来缓存更改。当你对缓存的快照满意之后，你通过 <code>git commit</code> 将它提交到你的项目历史中去。</p>
+<h2 id="git-add"><a href="#git-add" class="headerlink" title="git add"></a>git add</h2><p><code>git add</code> 命令将工作目录中的变化添加到缓存区。它告诉 Git 你想要在下一次提交时包含这个文件的更新。但是，<code>git add</code> 不会怎么影响你的仓库——在你运行 <code>git commit</code> 前更改都不会被记录。</p>
+<p>使用这些命令之时，你还需要 <code>git status</code> 来查看工作目录和缓存区的状态。</p>
+<p>git add 有几种用法</p>
+<ol>
+<li><code>git add -A</code> stages All 添加所有</li>
+<li><code>git add .</code> stages new and modified, without deleted  添加新文件和修改过的，不包括删除的</li>
+<li><code>git add -u</code> stages modified and deleted, without new  添加修改的和删除的，不包括新建的</li>
+</ol>
+<h2 id="git-commit"><a href="#git-commit" class="headerlink" title="git commit"></a>git commit</h2><p><code>git commit</code>命令将缓存的快照提交到项目历史。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git commit -m <span class="string">"&lt;message&gt;"</span></span><br></pre></td></tr></table></figure>
+<p>提交已经缓存的快照到本地仓库</p>
+<h2 id="git-commit-–amend"><a href="#git-commit-–amend" class="headerlink" title="git commit –amend"></a>git commit –amend</h2><p><code>git commit --amend</code> 命令是修复最新提交的便捷方式。它允许你将缓存的修改和之前的提交合并到一起，而不是提交一个全新的快照。它还可以用来简单地编辑上一次提交的信息而不改变快照</p>
+<p>但是，amend 不只是修改了最新的提交——它进行了一次替换。对于 Git 来说，这看上去像一个全新的提交，</p>
+<p>在公共仓库工作时一定要牢记这一点</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git commit --amend</span><br></pre></td></tr></table></figure>
+<p>合并缓存的修改和上一次的提交，用新的快照替换上一个提交。缓存区没有文件时运行这个命令可以用来编辑上次提交的提交信息，而不会更改快照。</p>
+
+				</div>
+                <p> -- <acronym title="End of File">EOF</acronym> -- </p>
+                <div class="post-info">
+                    <p>本文链接：<a href="http://whoyu.com/post/2018/06/git-commit/">http://whoyu.com/post/2018/06/git-commit/</a></p>
+                    <p>发表于<i>2018-06-14 10:30:00</i>，并被添加「
+                            
+                            <a  href="/tags/git" data-tag="git">git</a>
+                        」标签，最后修改于<i>2018-06-15 10:54:12</i></p>
+                </div>
+			</article>
+            
+                <div id="comments">
+	<h2>Comments</h2>
+	<div id="disqus_thread">
+	    评论加载中...<br><br>注：如果长时间无法加载，请针对 disq.us | disquscdn.com | disqus.com 启用代理。
+	</div>
+</div>
+            
+        </div>
+    </div>
+</div>
+
+    <script>
+         var disqus_config = function () {
+             this.page.url = 'http://whoyu.com/post/2018/06/git-commit/';
+             this.page.identifier = 'post/2018/06/git-commit/';
+         };
+        (function() {
+
+            var d = document, s = d.createElement('script');
+            var disqus_shortname = 'whoyu';
+            s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+
+            setTimeout(function(){
+                (d.head || d.body).appendChild(s);
+            },100);
+        })();
+    </script>
+
+
+<script src="/static/js/meizi.js"></script>
+</body>
+</html>

@@ -8,8 +8,24 @@
     <atom:link href="/rss.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Thu, 14 Jun 2018 03:10:58 GMT</pubDate>
+    <pubDate>Fri, 15 Jun 2018 02:54:12 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>git commit 提交代码</title>
+      <link>http://whoyu.com/post/2018/06/git-commit/</link>
+      <guid>http://whoyu.com/post/2018/06/git-commit/</guid>
+      <pubDate>Thu, 14 Jun 2018 02:30:00 GMT</pubDate>
+      <description>
+      
+        &lt;p&gt;列举出常用的提交代码的操作步骤以及涉及到的Git命令&lt;br&gt;
+      
+      </description>
+      
+      <content:encoded><![CDATA[<p>列举出常用的提交代码的操作步骤以及涉及到的Git命令<br><a id="more"></a></p><p><strong>文件的三种状态</strong></p><p>对于任何一个文件，在 Git 内都只有三种状态：</p><p>1、已修改（modified）    –&gt; Git 的工作目录</p><p>2、已暂存（staged）        –&gt;暂存区域</p><p>3、已提交（committed） –&gt;本地仓库</p><p>已修改表示修改了某个文件，但还没有提交保存；</p><p>已暂存表示把已修改的文件放在下次提交时要保存的清单中。</p><p>已提交表示该文件已经被安全地保存在本地数据库中了；</p><p>由此我们看到 Git 管理项目时，文件流转的三个工作区域：Git 的工作目录，暂存区域，以及本地仓库。</p><p><img src="/images/git-states.svg" alt=""></p><h3 id="提交代码基本流程"><a href="#提交代码基本流程" class="headerlink" title="提交代码基本流程"></a>提交代码基本流程</h3><p><code>git add</code> 和 <code>git commit</code> 这两个命令组成了最基本的 Git 工作流</p><p>首先，你要在工作目录中编辑你的文件。当你准备备份项目的当前状态时，你通过 <code>git add</code> 来缓存更改。当你对缓存的快照满意之后，你通过 <code>git commit</code> 将它提交到你的项目历史中去。</p><h2 id="git-add"><a href="#git-add" class="headerlink" title="git add"></a>git add</h2><p><code>git add</code> 命令将工作目录中的变化添加到缓存区。它告诉 Git 你想要在下一次提交时包含这个文件的更新。但是，<code>git add</code> 不会怎么影响你的仓库——在你运行 <code>git commit</code> 前更改都不会被记录。</p><p>使用这些命令之时，你还需要 <code>git status</code> 来查看工作目录和缓存区的状态。</p><p>git add 有几种用法</p><ol><li><code>git add -A</code> stages All 添加所有</li><li><code>git add .</code> stages new and modified, without deleted  添加新文件和修改过的，不包括删除的</li><li><code>git add -u</code> stages modified and deleted, without new  添加修改的和删除的，不包括新建的</li></ol><h2 id="git-commit"><a href="#git-commit" class="headerlink" title="git commit"></a>git commit</h2><p><code>git commit</code>命令将缓存的快照提交到项目历史。</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git commit -m <span class="string">"&lt;message&gt;"</span></span><br></pre></td></tr></table></figure><p>提交已经缓存的快照到本地仓库</p><h2 id="git-commit-–amend"><a href="#git-commit-–amend" class="headerlink" title="git commit –amend"></a>git commit –amend</h2><p><code>git commit --amend</code> 命令是修复最新提交的便捷方式。它允许你将缓存的修改和之前的提交合并到一起，而不是提交一个全新的快照。它还可以用来简单地编辑上一次提交的信息而不改变快照</p><p>但是，amend 不只是修改了最新的提交——它进行了一次替换。对于 Git 来说，这看上去像一个全新的提交，</p><p>在公共仓库工作时一定要牢记这一点</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git commit --amend</span><br></pre></td></tr></table></figure><p>合并缓存的修改和上一次的提交，用新的快照替换上一个提交。缓存区没有文件时运行这个命令可以用来编辑上次提交的提交信息，而不会更改快照。</p>]]></content:encoded>
+      
+      <comments>http://whoyu.com/post/2018/06/git-commit/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>git init 项目初始化</title>
