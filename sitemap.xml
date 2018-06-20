@@ -4,7 +4,7 @@
   <url>
     <loc>http://whoyu.com/post/2018/06/git-init/</loc>
     
-    <lastmod>2018-06-20T01:43:42.000Z</lastmod>
+    <lastmod>2018-06-20T01:46:01.000Z</lastmod>
     
   </url>
   
@@ -58,7 +58,7 @@
   </url>
   
   <url>
-    <loc>http://whoyu.com/tags/index.html</loc>
+    <loc>http://whoyu.com/rss/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
@@ -72,6 +72,13 @@
   </url>
   
   <url>
+    <loc>http://whoyu.com/tags/index.html</loc>
+    
+    <lastmod>2018-03-06T11:05:00.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://whoyu.com/404.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
@@ -79,14 +86,14 @@
   </url>
   
   <url>
-    <loc>http://whoyu.com/about/index.html</loc>
+    <loc>http://whoyu.com/archive/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://whoyu.com/archive/index.html</loc>
+    <loc>http://whoyu.com/about/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
@@ -101,13 +108,6 @@
   
   <url>
     <loc>http://whoyu.com/feed/index.html</loc>
-    
-    <lastmod>2018-03-06T11:05:00.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://whoyu.com/rss/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
