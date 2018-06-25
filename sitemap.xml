@@ -65,14 +65,7 @@
   </url>
   
   <url>
-    <loc>http://whoyu.com/links/index.html</loc>
-    
-    <lastmod>2018-03-06T11:05:00.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://whoyu.com/tags/index.html</loc>
+    <loc>http://whoyu.com/feed/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
@@ -80,13 +73,6 @@
   
   <url>
     <loc>http://whoyu.com/404.html</loc>
-    
-    <lastmod>2018-03-06T11:05:00.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://whoyu.com/archive/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
@@ -107,7 +93,21 @@
   </url>
   
   <url>
-    <loc>http://whoyu.com/feed/index.html</loc>
+    <loc>http://whoyu.com/archive/index.html</loc>
+    
+    <lastmod>2018-03-06T11:05:00.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://whoyu.com/links/index.html</loc>
+    
+    <lastmod>2018-03-06T11:05:00.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://whoyu.com/tags/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
