@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/bootstrap@4.1.3/dist/css/bootstrap.css">
+  <style type="text/css">
+    .wrapper {
+
+      margin: 40px;
+      margin-bottom: 100px;
+    }
+
+    .input {
+      width: 50px;
+      text-align: right;
+      border-radius: 0px;
+    }
+
+    .condition {
+      margin-bottom: 20px;
+    }
+
+    .form-check-label {
+      margin-right: 40px;
+    }
+
+    .form-check-input {
+      /* margin-left:40px; */
+    }
+
+    #result1,
+    #result2 {
+      margin: 5px 40px;
+    }
+  </style>
+
+  <script type="text/javascript">
+
+
+    window.onload = function () {
+
+      window.calc = function () {
+        console.log('run');
+        var a1 = parseInt(document.querySelector('#a1').value, 10);
+        var b1 = parseInt(document.querySelector('#b1').value, 10);
+        var c1 = parseInt(document.querySelector('#c1').value, 10);
+        var sum1 = parseInt(document.querySelector('#sum1').value, 10);
+
+        var a2 = parseInt(document.querySelector('#a2').value, 10);
+        var b2 = parseInt(document.querySelector('#b2').value, 10);
+        var c2 = parseInt(document.querySelector('#c2').value, 10);
+        var sum2 = parseInt(document.querySelector('#sum2').value, 10);
+
+
+
+        var chk1 = document.getElementById("chk_1").checked;
+        var chk2 = document.getElementById("chk_2").checked;
+
+        if (a1 > 0 && b1 > 0 && c1 > 0 && sum1 > 0 && a2 > 0 && b2 > 0 && c2 > 0 && sum2 > 0) {
+          console.log('params ok');
+        } else {
+          alert("参数错误")
+          return false;
+        }
+
+        var result = [];
+        for (var a = 1; a <= sum1; a++) {
+          for (var b = 1; b <= sum1; b++)
+            for (var c = 1; c <= sum1; c++) {
+
+
+              if ((a1 * a + b1 * b + c1 * c) == sum1) {
+                if ((a2 * a + b2 * b + c2 * c) == sum2) {
+
+                  if (chk1 && a < b) {
+                    continue;
+                  }
+
+                  if (chk2 && b < c) {
+                    continue;
+                  }
+                  result.push('A= ' + a + ', B= ' + b + ", C=" + c + " ;");
+                }
+              }
+            }
+        }
+        console.log(result);
+        document.getElementById("result1").innerHTML = result.length > 0 ? result.join("<br>") : '没有值';
+
+      }
+
+      window.calc2 = function () {
+        console.log('run');
+        var a1 = parseInt(document.querySelector('#aa1').value, 10);
+        var b1 = parseInt(document.querySelector('#bb1').value, 10);
+        var c1 = parseInt(document.querySelector('#cc1').value, 10);
+        var d1 = parseInt(document.querySelector('#dd1').value, 10);
+
+        var sum1 = parseInt(document.querySelector('#sumTwo1').value, 10);
+
+        var a2 = parseInt(document.querySelector('#aa2').value, 10);
+        var b2 = parseInt(document.querySelector('#bb2').value, 10);
+        var c2 = parseInt(document.querySelector('#cc2').value, 10);
+        var d2 = parseInt(document.querySelector('#dd2').value, 10);
+
+        var sum2 = parseInt(document.querySelector('#sumTwo2').value, 10);
+
+        console.log(sum1, sum2);
+
+        var chk1 = document.getElementById("chkk_1").checked;
+        var chk2 = document.getElementById("chkk_2").checked;
+        var chk3 = document.getElementById("chkk_3").checked;
+
+        if (a1 > 0 && b1 > 0 && c1 > 0 && d1 > 0 && sum1 > 0 && a2 > 0 && b2 > 0 && c2 > 0 && d2 > 0 && sum2 > 0) {
+          console.log('params ok');
+        } else {
+          alert("参数错误")
+          return false;
+        }
+
+        var result = [];
+        for (var a = 1; a <= sum1; a++) {
+          for (var b = 1; b <= sum1; b++)
+            for (var c = 1; c <= sum1; c++)
+              for (var d = 1; d <= sum1; d++) {
+                if ((a1 * a + b1 * b + c1 * c + d1 * d) == sum1) {
+                  if ((a2 * a + b2 * b + c2 * c + d2 * d) == sum2) {
+
+                    if (chk1 && a < b) {
+                      continue;
+                    }
+
+                    if (chk2 && b < c) {
+                      continue;
+                    }
+                    if (chk3 && c < d) {
+                      continue;
+                    }
+                    result.push('A= ' + a + ', B= ' + b + ", C=" + c + ", D=" + d + " ;");
+                  }
+                }
+              }
+        }
+        console.log(result);
+        document.getElementById("result2").innerHTML = result.length > 0 ? result.join("<br>") : '没有值';
+
+      }
+
+
+      window.calc3 = function () {
+        console.log('run');
+        var a1 = parseInt(document.querySelector('#aaa1').value, 10);
+        var b1 = parseInt(document.querySelector('#bbb1').value, 10);
+        var sum1 = parseInt(document.querySelector('#sumThree1').value, 10);
+
+        var chk1 = document.getElementById("chkkk_1").checked;
+
+        if (a1 > 0 && b1 > 0  && sum1 > 0 ) {
+          console.log('params ok');
+        } else {
+          alert("参数错误")
+          return false;
+        }
+
+        var result = [];
+        for (var a = 1; a <= sum1; a++) {
+          for (var b = 1; b <= sum1; b++){
+              if ((a1 * a + b1 * b ) == sum1) {
+
+                  if (chk1 && a < b) {
+                    continue;
+                  }
+                  result.push('A= ' + a + ', B= ' + b + " ;");
+              }
+            }
+        }
+        console.log(result);
+        document.getElementById("result3").innerHTML = result.length > 0 ? result.join("<br>") : '没有值';
+
+      }
+
+    }
+
+  </script>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    例如：5. 2A+3B=49;A>=B;
+    <hr>
+    <div class="condition">
+      <h6>条件1：</h6>
+      <input type="number" class="input" value="2" id="aaa1"> A
+      <span>+</span>
+      <input type="number" class="input" value="3" id="bbb1"> B
+      <span>=</span>
+      <input type="number" class="input" placeholder="数字" value="49" id="sumThree1">
+    </div>
+
+    <div class="condition">
+      <h6>条件3：</h6>
+      <div style="margin-left:20px;">
+        <input type="checkbox" class="form-check-input" id="chkkk_1">
+        <label class="form-check-label" for="chk_1">A>=B</label>
+      </div>
+
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="calc3()">计算1</button>
+
+    <div id="result3">
+
+    </div>
+  </div>
+
+  <div class="wrapper">
+    例如：5. 2A+3B+4C=194; A+B+C=65; A>=B>=C;
+    <hr>
+    <div class="condition">
+      <h6>条件1：</h6>
+      <input type="number" class="input" value="1" id="a1"> A
+      <span>+</span>
+      <input type="number" class="input" value="1" id="b1"> B
+      <span>+</span>
+      <input type="number" class="input" value="1" id="c1"> C
+      <span>=</span>
+      <input type="number" class="input" placeholder="数字" value="16" id="sum1">
+    </div>
+
+    <div class="condition">
+      <h6>条件2：</h6>
+      <input type="number" class="input" value="2" id="a2"> A
+      <span>+</span>
+      <input type="number" class="input" value="3" id="b2"> B
+      <span>+</span>
+      <input type="number" class="input" value="4" id="c2"> C
+      <span>=</span>
+      <input type="number" class="input" placeholder="数字" value="49" id="sum2">
+    </div>
+
+    <div class="condition">
+      <h6>条件3：</h6>
+      <div style="margin-left:20px;">
+        <input type="checkbox" class="form-check-input" id="chk_1">
+        <label class="form-check-label" for="chk_1">A>=B</label>
+
+        <input type="checkbox" class="form-check-input" id="chk_2">
+        <label class="form-check-label" for="chk_2">B>=C</label>
+      </div>
+
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="calc()">计算2</button>
+
+    <div id="result1">
+
+    </div>
+  </div>
+
+
+
+
+  <div class="wrapper">
+    例如：6. 1A+2B+3C+4D=194; A+B+C+D=65; A>B>C>D;
+    <hr>
+    <div class="condition">
+      <h6>条件1：</h6>
+      <input type="number" class="input" value="1" id="aa1"> A
+      <span>+</span>
+      <input type="number" class="input" value="1" id="bb1"> B
+      <span>+</span>
+      <input type="number" class="input" value="1" id="cc1"> C
+      <span>+</span>
+      <input type="number" class="input" value="1" id="dd1"> D
+      <span>=</span>
+      <input type="number" class="input" placeholder="数字" value="65" id="sumTwo1">
+    </div>
+
+    <div class="condition">
+      <h6>条件2：</h6>
+      <input type="number" class="input" value="1" id="aa2"> A
+      <span>+</span>
+      <input type="number" class="input" value="2" id="bb2"> B
+      <span>+</span>
+      <input type="number" class="input" value="3" id="cc2"> C
+      <span>+</span>
+      <input type="number" class="input" value="4" id="dd2"> D
+      <span>=</span>
+      <input type="number" class="input" placeholder="数字" value="194" id="sumTwo2">
+    </div>
+
+    <div class="condition">
+      <h6>条件3：</h6>
+      <div style="margin-left:20px;">
+        <input type="checkbox" class="form-check-input" id="chkk_1">
+        <label class="form-check-label" for="chk_1">A>=B</label>
+
+        <input type="checkbox" class="form-check-input" id="chkk_2">
+        <label class="form-check-label" for="chkk_2">B>=C</label>
+        <input type="checkbox" class="form-check-input" id="chkk_3">
+        <label class="form-check-label" for="chkk_3">C>=D</label>
+
+      </div>
+
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="calc2()">计算3</button>
+
+    <div id="result2">
+
+    </div>
+  </div>
+
+
+</body>
+
+</html>
