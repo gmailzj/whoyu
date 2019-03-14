@@ -226,6 +226,16 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">find / -maxdepth 3  -name &quot;*log&quot;</span><br><span class="line">find / -d 3  -name &quot;*log&quot; (Mac)</span><br></pre></td></tr></table></figure>
 <h3 id="用ls命令来过滤文件或者文件夹"><a href="#用ls命令来过滤文件或者文件夹" class="headerlink" title="用ls命令来过滤文件或者文件夹"></a>用ls命令来过滤文件或者文件夹</h3><p>只显示文件夹     <strong>ls -l | grep ^d</strong></p>
 <p>只显示文件         <strong>ls -l | grep ^-</strong></p>
+<h3 id="查找文件内容"><a href="#查找文件内容" class="headerlink" title="查找文件内容"></a>查找文件内容</h3><p>查找当前目录(含子目录)下.php文件中，内容包含actionIndex的文件。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">find . -name &apos;*.php&apos; | xargs grep &quot;actionIndex&quot;</span><br></pre></td></tr></table></figure>
+<p>如果要排除子目录，按照上面的规则，增加 -depth参数 =1 或者 -maxdepth =1</p>
+<p>xargs 还可以指定参数位置，-I (大写的i)，指定在管道后面命令的标准输入参数 的位置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">find . -name &apos;*.php&apos; | xargs -I &#123;&#125; grep &quot;actionIndex&quot; &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>只是当前目录也可以使用grep，但是后面只能是文件；比如查找当前目录下.php文件包含actionIndex的文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">grep &quot;actionIndex&quot; *.php</span><br></pre></td></tr></table></figure>
+<p>用上 -r 参数就可以查找目录，一般会带上-n 表示显示行号</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">grep -r -n &quot;actionIndex&quot; ./</span><br></pre></td></tr></table></figure>
+<p>grep 查找目录 的时候会慢很多，一般用上面的find查询方式。</p>
 
 				</div>
                 <p> -- <acronym title="End of File">EOF</acronym> -- </p>
@@ -234,7 +244,7 @@
                     <p>发表于<i>2016-05-02 15:56:57</i>，并被添加「
                             
                             <a  href="/tags/linux, find" data-tag="linux, find">linux, find</a>
-                        」标签，最后修改于<i>2018-04-10 11:11:18</i></p>
+                        」标签，最后修改于<i>2019-03-13 23:32:44</i></p>
                 </div>
 			</article>
             

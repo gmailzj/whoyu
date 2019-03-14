@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://whoyu.com/post/2016/05/find%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95/</loc>
+    
+    <lastmod>2019-03-13T15:32:44.949Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://whoyu.com/post/2018/06/git-init/</loc>
     
     <lastmod>2018-06-20T01:46:01.000Z</lastmod>
@@ -12,13 +19,6 @@
     <loc>http://whoyu.com/post/2018/06/git-commit/</loc>
     
     <lastmod>2018-06-15T02:56:44.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://whoyu.com/post/2016/05/find%E5%91%BD%E4%BB%A4%E7%94%A8%E6%B3%95/</loc>
-    
-    <lastmod>2018-04-10T03:11:18.000Z</lastmod>
     
   </url>
   
@@ -58,14 +58,14 @@
   </url>
   
   <url>
-    <loc>http://whoyu.com/about/index.html</loc>
+    <loc>http://whoyu.com/links/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://whoyu.com/links/index.html</loc>
+    <loc>http://whoyu.com/tags/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
@@ -86,14 +86,14 @@
   </url>
   
   <url>
-    <loc>http://whoyu.com/archive/index.html</loc>
+    <loc>http://whoyu.com/about/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://whoyu.com/feed/index.html</loc>
+    <loc>http://whoyu.com/archive/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
@@ -107,7 +107,7 @@
   </url>
   
   <url>
-    <loc>http://whoyu.com/tags/index.html</loc>
+    <loc>http://whoyu.com/feed/index.html</loc>
     
     <lastmod>2018-03-06T11:05:00.000Z</lastmod>
     
