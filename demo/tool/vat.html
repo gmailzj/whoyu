@@ -20,11 +20,11 @@
             width: 90%;
             margin: 10px auto;
         }
-        
+
         .upload-demo {
             width: 360px;
         }
-        
+
         .mr_u_d {
             margin: 5px
         }
@@ -36,7 +36,8 @@
 
         <div class="upload-demo">
             <div>
-                <span class="el-tag el-tag--success el-tag--small mr_u_d">报税计算工具<!----></span>
+                <span class="el-tag el-tag--success el-tag--small mr_u_d">报税计算工具
+                    <!----></span>
             </div>
             <div tabindex="0" class="el-upload el-upload--text dragFile">
                 <div class="el-upload-dragger">
@@ -51,11 +52,56 @@
         <!-- <div class="form-group">
             <input type="file" class="form-control-file" id="exampleFormControlFile1" onchange="importf(this)" />
         </div> -->
-        <div>
+        <div style="margin-top:30px">1. 选择报税国</div>
+        <div><select style="width:300px;" class="form-control" id="exampleFormControlSelect1">
+                <option value="">请选择报税国</option>
+                <option value="DE">DE</option>
+                <option value="GB">GB</option>
+                <option value="FR">FR</option>
+                <option value="IT">IT</option>
+                <option value="ES">ES</option>
+            </select>
+        </div>
+
+        <div style="margin-top:30px;">2. 选择有税号国家</div>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" name="hasTaxCountry" id="hasTaxCountry_1" value="DE">
+            <label class="form-check-label" for="hasTaxCountry_1">
+                DE
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" name="hasTaxCountry" id="hasTaxCountry_2" value="GB">
+            <label class="form-check-label" for="hasTaxCountry_2">
+                    GB
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" name="hasTaxCountry" id="hasTaxCountry_3" value="FR">
+            <label class="form-check-label" for="hasTaxCountry_3">
+                    FR
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" name="hasTaxCountry" id="hasTaxCountry_4" value="IT">
+            <label class="form-check-label" for="hasTaxCountry_4">
+                    IT
+            </label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" name="hasTaxCountry" id="hasTaxCountry_5" value="ES">
+            <label class="form-check-label" for="hasTaxCountry_5">
+                    ES
+            </label>
+        </div>
+        <div style="display:none;">
             当前条件为 'BO'列中选择值为"DE", 然后 'AZ'列 求和
         </div>
-        <button class="btn btn-primary">计算</button>
-        <div id="demo"></div>
+        <div style="display:none;"><button class="btn btn-primary" id="btn_calc">计算</button></div>
+
+        <p style="margin-top:30px;">结果：</p>
+        <div id="x1"></div>
+        <div id="x2"></div>
 
     </div>
 </body>
@@ -68,10 +114,23 @@
         if (!files) {
             return;
         }
+        //
+        if ($("#exampleFormControlSelect1").val() == "") {
+            alert("请先选择报税国")
+            return false;
+        }
+
+        var hasTaxCountry = [];
+        var $hasTaxCountry = $("[name='hasTaxCountry']:checked");
+        if ($hasTaxCountry.length <= 0) {
+            alert("请选择有税号国家")
+            return false;
+        }
+
         var f = files[0];
         console.log(f)
         var reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             try {
                 var data = e.target.result;
                 if (rABS) {
@@ -89,9 +148,9 @@
                 return;
             }
             // check column
-            if (workbook.Sheets.length > 1) {
-                alert("只能有1个工作表Sheets");
-                return false;
+            if ((Object.keys(workbook.Sheets)).length > 1) {
+                alert("检测到有多个工作表Sheets，程序只计算第 1 个Sheets");
+                // return false;
             }
             var firstSheetNames = workbook.SheetNames[0];
             var fromTo = workbook.Sheets[firstSheetNames]["!ref"];
@@ -102,18 +161,32 @@
             var contentJson = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheetNames]);
             var dataFiltered;
             var sum = 0;
+            var sumX2 = 0;
             if (contentJson) {
                 console.log(contentJson.length)
-                dataFiltered = contentJson.filter(filterHandler)
-                dataFiltered.forEach(function(val, key) {
+
+                // 计算x1
+                dataFiltered = contentJson.filter(filterHandler($("#exampleFormControlSelect1").val()))
+                dataFiltered.forEach(function (val, key) {
                     if (typeof val['TOTAL_ACTIVITY_VALUE_AMT_VAT_INCL'] != "undefined") {
                         sum += parseFloat(val["TOTAL_ACTIVITY_VALUE_AMT_VAT_INCL"]);
                     }
 
                 })
+
+                // 计算x2
+
+                dataFiltered2 = contentJson.filter(filterHandlerBp($("#exampleFormControlSelect1").val()))
+                dataFiltered2.forEach(function (val, key) {
+                    if (typeof val['TOTAL_ACTIVITY_VALUE_AMT_VAT_INCL'] != "undefined") {
+                        sumX2 += parseFloat(val["TOTAL_ACTIVITY_VALUE_AMT_VAT_INCL"]);
+                    }
+
+                })
             }
-            var html = "TOTAL_ACTIVITY_VALUE_AMT_VAT_INCL= " + sum;
-            document.getElementById("demo").innerHTML = html;
+            var html = "x1= " + sum;
+            document.getElementById("x1").innerHTML = html;
+            document.getElementById("x2").innerHTML = "x2= " +sumX2;
         };
         if (rABS) {
             reader.readAsArrayBuffer(f);
@@ -122,17 +195,52 @@
         }
     }
 
-    function filterHandler(val) {
-        if (!val) {
-            return false
+    function filterHandler(country) {
+        return function (val) {
+            if (!val) {
+                return false
+            }
+            if (typeof val["SALE_DEPART_COUNTRY"] == "undefined") {
+                return false
+            }
+            if (val["SALE_DEPART_COUNTRY"].toUpperCase() == country) {
+                return true;
+            }
+            return false;
         }
-        if (typeof val["SALE_DEPART_COUNTRY"] == "undefined") {
-            return false
+
+    }
+    function filterHandlerBp(country) {
+        var $hasTaxCountry = $("[name='hasTaxCountry']:checked");
+        var checked = {"CN":1};
+        $hasTaxCountry.each(function(){
+            checked[$(this).val()] = 1;
+        })
+        console.log(checked);
+        return function (val) {
+            if (!val) {
+                return false
+            }
+            
+            
+
+            if (typeof val["SALE_DEPART_COUNTRY"] != "undefined") {
+                var bo = val["SALE_DEPART_COUNTRY"].toUpperCase();
+                if(checked[bo] !=undefined){
+                    return false;
+                }
+            }
+            
+
+            if (typeof val["SALE_ARRIVAL_COUNTRY"] == "undefined") {
+                return false
+            }
+            if (val["SALE_ARRIVAL_COUNTRY"].toUpperCase() == country) {
+                return true;
+            }
+            return false;
         }
-        if (val["SALE_DEPART_COUNTRY"].toUpperCase() == "DE") {
-            return true;
-        }
-        return false;
+
     }
 
     function fixdata(data) {
@@ -149,18 +257,18 @@
         return o;
     }
 
-    $(function() {
-        $(".el-upload__input").on("change", function(e) {
+    $(function () {
+        $(".el-upload__input").on("change", function (e) {
             var obj = e.target;
             importHandler(obj.files);
             console.log(e.target, obj.files)
         })
-        $(".el-upload").on("click", ".el-upload__text", function(e) {
+        $(".el-upload").on("click", ".el-upload__text", function (e) {
             $(".el-upload__input").trigger("click")
             return false;
         })
 
-        $(".dragFile").on("dragenter", function(e) {
+        $(".dragFile").on("dragenter", function (e) {
             e.preventDefault();
         });
         $('.dragFile').on('dragover', (e) => {
@@ -175,6 +283,12 @@
             console.log(e, files)
             importHandler(files);
             // appendFile(files, '.list-drag')
+        })
+
+        $("#btn_calc").on("click", function () {
+            // check country
+            // check has tax country
+            console.log("calc");
         })
 
     })
