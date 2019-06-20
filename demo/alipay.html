@@ -3,7 +3,7 @@
 redirect("https://openauth.alipay.com/oauth2/publicAppAuthorize.htm", {
                                     app_id: "2019061965620494",
                                     scope: "auth_base",
-                                    redirect_uri: "https://apifp.yewifi.com/pay/alipay-login-and-jump"
+                                    redirect_uri: "https://apifp.yewifi.com/pay/alipay-login-and-jump?tc=500"
                                 })
 function redirect(url, params){
 	url += "?app_id="+params.app_id;
